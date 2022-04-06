@@ -2,6 +2,8 @@
 
 from typing import Generic, Union, Optional, Any
 
+from datetime import datetime
+
 from discord.ext.commands.view import StringView
 from discord.ext import commands
 import discord
@@ -17,9 +19,19 @@ class Context(Generic[BotT]):
     ):
         self.bot, self.interaction = bot, interaction
 
+        self.message = interaction.message or self
+        self.guild = interaction.guild
+        self.author = interaction.user
+
+        self.edited_at: Optional[datetime] = None
+        self.created_at = interaction.created_at
+
         self.command, self.app_command = command, getattr(command, "__fslash__", None)
         self.args, self.kwargs = (), kwargs
+
         self.view = StringView("")
+        self.invoked_parents = []
+        self.invoked_with = None
 
     async def trigger_typing(self):
         ...

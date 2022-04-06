@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Callable, Union, Optional, Sequence, Any
+from typing import Callable, Union, Optional, Any
 
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 from string import octdigits
 from re import sub
 import inspect
@@ -17,7 +17,10 @@ from ._types import AdjustmentNameMode, BotT
 from .context import Context, is_fslash
 
 
-__all__ = ("extend_force_slash", "is_fslash", "Context", "AdjustmentNameMode")
+__all__ = (
+    "extend_force_slash", "is_fslash", "Context", "AdjustmentNameMode",
+    "groups", "exceptions"
+)
 
 
 VALID_COMMAND_NAME_CHARACTERS_WITHOUT_LETTERS = f"{octdigits}-_"
@@ -98,13 +101,28 @@ def _get(command, key, default):
 # `parse_arguments`で何も実行しないようにする。
 _original_parse_arguments = commands.Command._parse_arguments
 async def _new_parse_arguments(self, ctx):
-    if is_fslash(ctx):
+    if is_fslash(ctx) and not getattr(ctx, "__fslash_do_original_pa__", False):
+        print(1)
         ctx.args = (ctx.command.cog, ctx) if ctx.command.cog else (ctx,)
     else:
-        return _original_parse_arguments(self, ctx)
+        return await _original_parse_arguments(self, ctx)
 setattr(commands.Command, "_parse_arguments", _new_parse_arguments)
 
 
+async def _run_command(bot, interaction, command, content, **kwargs) -> None:
+    # Run command
+    ctx = Context(interaction, kwargs, command, bot)
+    if content is not None:
+        ctx.view = type(ctx.view)(content)
+        setattr(ctx, "__fslash_do_original_pa__", True)
+    try:
+        await command.invoke(ctx) # type: ignore
+    except Exception as e:
+        bot.dispatch("command_error", ctx, e)
+
+
+groups = []
+exceptions = defaultdict[str, dict[Any, Exception]](dict)
 __patched = False
 def extend_force_slash(
     bot: BotT, *,
@@ -117,8 +135,7 @@ def extend_force_slash(
     """
     global _bot, groups, exceptions
     _bot = bot
-    groups = first_groups or []
-    exceptions = defaultdict[str, dict[Any, Exception]](dict)
+    if first_groups is not None: groups = first_groups
 
     global __patched
     assert not __patched, "This can only be called once."
@@ -127,12 +144,23 @@ def extend_force_slash(
     # コマンドが作られた際にそのコマンドを呼び出すコマンドをtreeに登録する。
     def make_command_new_init(original):
         def command_new_init(command: commands.Command, func, /, **kwargs):
+            original(command, func, **kwargs)
+
+            # もしNestしすぎたグループコマンドのコマンドの場合はパスする。この`__fslash_*_*__`は下で作られます。
+            if command.parent is not None and getattr(
+                command.parent, "__fslash_max_parent__", False
+            ):
+                print(-10, command.name)
+                setattr(command, "__fslash_max_parent__", True)
+                return
+
+            # コマンドを実装するかのチェックをする。
+            if check is not None and not check(command): return
+
             _replace_atp(
                 True, exceptions["replace_invalid_annotation_to_str"],
                 replace_invalid_annotation_to_str
             )
-            original(command, func, **kwargs)
-            if check is not None and not check(command): return
 
             # もし親のグループが指定されているのならそれを探し出す。
             parent = None
@@ -150,11 +178,23 @@ def extend_force_slash(
             name = command.name if adjustment_name is None \
                 else adjustment_command_name(command.name, adjustment_name)
             if isinstance(command, commands.Group):
-                groups.append(app_commands.Group(
-                    name=name,
-                    description=command.description or default_description,
-                    parent=parent, guild_ids=_get(command, "guild_ids", None)
-                ))
+                try:
+                    groups.append(app_commands.Group(
+                        name=name,
+                        description=command.description or default_description,
+                        parent=parent, guild_ids=_get(command, "guild_ids", None)
+                    ))
+                except ValueError:
+                    # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
+                    assert isinstance(parent, app_commands.Group)
+                    @parent.command(
+                        name=name, description=command.description or default_description
+                    )
+                    async def alternative_for_nested(
+                        interaction: discord.Interaction, content: str
+                    ):
+                        await _run_command(bot, interaction, command, content)
+                    setattr(command, "__fslash_max_parent__", True)
                 setattr(command, "__fslash__", groups[-1])
                 print(0, command, parent)
             else:
@@ -177,12 +217,7 @@ def extend_force_slash(
 
                 # 実行される関数を用意する。
                 async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
-                    ctx = Context(interaction, kwargs, command, bot)
-                    try:
-                        await command.invoke(ctx) # type: ignore
-                    except Exception as e:
-                        bot.dispatch("command_error", ctx, e)
-                        raise e
+                    await _run_command(bot, interaction, command, None, **kwargs)
                 setattr(app_command, "_callback", inner_function)
 
                 print(1, command, parent)
@@ -197,11 +232,10 @@ def extend_force_slash(
         if slash is not None:
             if slash.parent is None:
                 bot.tree.remove_command(slash) # type: ignore
+                print(-1, slash)
             else:
                 slash.parent.remove_command(slash) # type: ignore
-                if not slash.parent._children:
-                    # もしサブコマンドがいないのならグループコマンドにも死んでもらう。
-                    groups.remove(slash.parent)
+                print(-2, slash.parent)
     setattr(commands.Command, "__del__", command_new_del)
 
     # `sync`が実行された際に`groups`にあるものを追加するようにする。
@@ -211,7 +245,9 @@ def extend_force_slash(
             if not getattr(group, "__synced__", False) \
                     and group.parent is None:
                 bot.tree.add_command(group)
+                print(group._children)
                 setattr(group, "__synced__", True)
+        print(groups)
         return await original_sync(self, guild=guild)
     app_commands.CommandTree.sync = new_sync
 
