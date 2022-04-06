@@ -106,7 +106,7 @@ class Context(Generic[BotT]):
             self.invoke = self.command.invoke
 
         self.view = StringView("")
-        self.invoked_parents = []
+        self.invoked_parents: list[Any] = []
         self.invoked_with = None
 
         self.trigger_typing_mode = trigger_typing_mode
