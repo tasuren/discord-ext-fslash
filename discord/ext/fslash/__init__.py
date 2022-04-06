@@ -1,8 +1,9 @@
 ".. include:: ../../../README.md" # discord-ext-fslash
 
 from __future__ import annotations
+from secrets import choice
 
-from typing import Callable, Iterable, Union, Optional, Any
+from typing import Callable, Iterable, Literal, Union, Optional, Any
 
 from collections import defaultdict
 from string import octdigits
@@ -51,15 +52,19 @@ _context_kwargs = {}
 
 
 # ConverterのアノテーションをTransformerに交換するようにする。
-original_evaluate_annotation = discord.utils.evaluate_annotation
+_original_evaluate_annotation = discord.utils.evaluate_annotation
 def _new_evaluate_annotation(*args, **kwargs):
-    annotation = original_evaluate_annotation(*args, **kwargs)
+    annotation = _original_evaluate_annotation(*args, **kwargs)
     if commands.Converter in getattr(annotation, "__mro__", ()):
         converter = annotation()
         # Converterを実行するTransformerです。
         class ConverterTransformer(app_commands.Transformer):
+
+            # コマンドフレームワークで実行された際には、元のコンバーターを実行できるように元を取って置く。
+            __fslash_original_annotation__ = annotation
+
             @classmethod
-            async def transform(cls, interaction: discord.Interaction, value: str):
+            async def transform(cls, interaction, value: str):
                 return await converter.convert(
                     Context(interaction, {}, None, _bot, **_context_kwargs), value
                 )
@@ -68,8 +73,8 @@ def _new_evaluate_annotation(*args, **kwargs):
 discord.utils.evaluate_annotation = _new_evaluate_annotation
 
 
-original_atp = app_commands.transformers.annotation_to_parameter
-original_signature = inspect.signature
+_original_atp = app_commands.transformers.annotation_to_parameter
+_original_signature = inspect.signature
 def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats: bool = False):
     # `annotation_to_parameter`の実行が失敗した際に`str`として扱うようにする関数です。
     # それと、inspectの`signature`もアノテーションがない場合は拡張します。
@@ -77,18 +82,18 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
         def new_atp(annotation, parameter):
             if riats:
                 try:
-                    return original_atp(annotation, parameter)
+                    return _original_atp(annotation, parameter)
                 except Exception as e:
                     # 失敗したなら`str`のアノテーションにする。
                     if failed_annotations is not None:
                         failed_annotations[annotation] = e
-                    return original_atp(str, parameter)
+                    return _original_atp(str, parameter)
             else:
-                return original_atp(annotation, parameter)
+                return _original_atp(annotation, parameter)
         app_commands.transformers.annotation_to_parameter = new_atp
 
         def new_signature(*args, **kwargs):
-            signature = original_signature(*args, **kwargs)
+            signature = _original_signature(*args, **kwargs)
             ok = False
             new = []
             for name, parameter in list(signature.parameters.items()):
@@ -101,8 +106,8 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
             return signature.replace(parameters=new) if ok else signature
         inspect.signature = new_signature
     else:
-        app_commands.transformers.annotation_to_parameter = original_atp
-        inspect.signature = original_signature
+        app_commands.transformers.annotation_to_parameter = _original_atp
+        inspect.signature = _original_signature
 
 
 def _get(command, key, default):
@@ -127,6 +132,10 @@ async def _run_command(bot, interaction, command, content, **kwargs) -> None:
     if content is not None:
         ctx.view = type(ctx.view)(content)
         setattr(ctx, "__fslash_do_original_pa__", True)
+    # Choiceは`value`の値に置き換える。
+    for key, value in list(kwargs.items()):
+        if isinstance(value, app_commands.Choice):
+            kwargs[key] = value.value
     try:
         await command.invoke(ctx) # type: ignore
     except Exception as e:
@@ -140,6 +149,23 @@ def _apply_describe(command):
         command.__dict__.items()
     ):
         setattr(command.callback, name, value)
+
+
+_original_run_converter = commands.core.run_converters # type: ignore
+async def _new_run_converters(ctx, converter, argument, param):
+    origin = getattr(converter, "__origin__", None)
+    if origin is app_commands.Choice and hasattr(
+        ctx.command.callback, "__fslash_param_choices__"
+    ):
+        # ChoiceをLiteralに交換する。
+        if choices := ctx.command.callback.__fslash_param_choices__.get(param.name):
+            converter = Literal[0]
+            setattr(converter, "__args__", tuple(choice.value for choice in choices))
+    elif isinstance(converter, app_commands.transformers._TransformMetadata):
+        # TransformはConverterに置き換える。
+        converter = getattr(converter.metadata, "__fslash_original_annotation__")
+    return await _original_run_converter(ctx, converter, argument, param)
+commands.core.run_converters = _new_run_converters # type: ignore
 
 
 groups = []
@@ -231,7 +257,9 @@ def extend_force_slash(
         ...
     ```
 
-    You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument."""
+    You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
+    Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.
+    And the value of the argument at runtime will be the value of `Choice.value`, not `Choice`."""
     global _bot, groups, exceptions, _context_kwargs
     _context_kwargs.update(context_kwargs or {})
     _bot = bot
@@ -260,7 +288,6 @@ def extend_force_slash(
         if command.parent is not None and getattr(
             command.parent, "__fslash_max_parent__", False
         ):
-            print(-10, command.name)
             setattr(command, "__fslash_max_parent__", True)
             return
 
@@ -284,6 +311,14 @@ def extend_force_slash(
         # もしコマンドフレームワークのグループコマンドのサブコマンドの場合は、親コマンドのスラッシュのグループコマンドを、スラッシュでも親コマンドとする。
         if parent is None and command.parent is not None:
             parent = getattr(command.parent, "__fslash__")
+        # choiceのデータをコマンドフレームワークのコマンド実行時にLiteralに交換するので取って置く。
+        if hasattr(command.callback, "__discord_app_commands_param_choices__"):
+            setattr(
+                command._callback, "__fslash_param_choices__",
+                getattr(
+                    command.callback, "__discord_app_commands_param_choices__", None
+                ).copy() # type: ignore
+            )
         # スラッシュコマンドを作る。
         name = command.name if adjustment_name is None \
             else adjustment_command_name(command.name, adjustment_name)
@@ -306,7 +341,6 @@ def extend_force_slash(
                     await _run_command(bot, interaction, command, content)
                 setattr(command, "__fslash_max_parent__", True)
             setattr(command, "__fslash__", groups[-1])
-            print(0, command, parent)
         else:
             _apply_describe(command)
             # スラッシュコマンドを作る。
@@ -325,7 +359,6 @@ def extend_force_slash(
                 await _run_command(bot, interaction, command, None, **kwargs)
             setattr(app_command, "_callback", inner_function)
 
-            print(1, command, parent)
 
         _replace_atp(False, None, replace_invalid_annotation_to_str)
     setattr(commands.Command, "__init__", command_new_init)
@@ -344,10 +377,8 @@ def extend_force_slash(
         if slash is not None:
             if slash.parent is None:
                 bot.tree.remove_command(slash) # type: ignore
-                print(-1, slash)
             else:
                 slash.parent.remove_command(slash) # type: ignore
-                print(-2, slash.parent)
     setattr(commands.Command, "__del__", command_new_del)
 
     # `sync`が実行された際に`groups`にあるものを追加するようにする。
@@ -357,9 +388,7 @@ def extend_force_slash(
             if not getattr(group, "__synced__", False) \
                     and group.parent is None:
                 bot.tree.add_command(group)
-                print(group._children)
                 setattr(group, "__synced__", True)
-        print(groups)
         return await original_sync(self, guild=guild)
     app_commands.CommandTree.sync = new_sync
 

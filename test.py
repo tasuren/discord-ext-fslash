@@ -44,10 +44,24 @@ class TestCog(commands.Cog):
         ...
 
     @coggroup_test.command()
-    async def testcogsub(self, ctx, wow):
+    @discord.app_commands.choices(wow=[
+        discord.app_commands.Choice(name="test", value=1),
+        discord.app_commands.Choice(name="test2", value=2)
+    ])
+    async def testcogsub(self, ctx, wow: discord.app_commands.Choice[int]):
         await ctx.reply(f"Ok: {wow}")
 
-    print(1)
+    @coggroup_test.group()
+    async def test(self, ctx):
+        ...
+
+    @test.group()
+    async def a(self, ctx):
+        ...
+
+    @a.command()
+    async def b(self, ctx):
+        await ctx.reply("Ok")
 
 
 @bot.command("sleep", guild=GUILD)
@@ -56,10 +70,6 @@ async def sleep_(ctx):
     await sleep(3)
     await ctx.reply("Ok")
 
-@bot.command(guild=GUILD)
-async def literal(ctx, a):
-    ...
-literal.__annotations__["a"] = "Literal[1,2]"
 
 @bot.command(guild=GUILD, description="test")
 async def normal(ctx):
@@ -93,7 +103,7 @@ class NewConverter(commands.Converter):
     discord.app_commands.Choice(name="test", value=2)
 ])
 async def test(ctx, a: discord.app_commands.Choice[int], b: int, c: bool, d: float, e: discord.Member, f: NewConverter):
-    await ctx.reply(f'Ok: {"".join(map(str, (a, b, c, d, e, f)))}')
+    await ctx.reply(f'Ok: {", ".join(map(str, (a, b, c, d, e, f)))}')
 
 
 # Many nested commands
@@ -131,6 +141,16 @@ async def level3(ctx):
 async def level31(ctx):
     await ctx.reply("Ok")
 
+@bot.command(description="Ban member", fsparent="category")
+@commands.has_guild_permissions(ban_members=True)
+@commands.bot_has_guild_permissions(ban_members=True)
+@commands.cooldown(1, 10, commands.BucketType.guild)
+@discord.app_commands.describe(member="Member to be banned")
+async def ban(ctx, *, member: discord.Member):
+    # `/server-tool ban member: ...` or `fs!ban ...` to run this command.
+    await ctx.trigger_typing()
+    await member.ban()
+    await ctx.reply("pong")
 
 @bot.listen()
 async def on_command_error(ctx, error):

@@ -43,6 +43,7 @@ bot = extend_force_slash(
 
 @bot.command(description="Ban member", fsparent="server-tool")
 @commands.has_guild_permissions(ban_members=True)
+@commands.bot_has_guild_permissions(ban_members=True)
 @commands.cooldown(1, 10, commands.BucketType.guild)
 @discord.app_commands.describe(member="Member to be banned")
 async def ban(ctx, *, member: discord.Member):
