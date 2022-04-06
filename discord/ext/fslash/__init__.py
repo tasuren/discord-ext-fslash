@@ -270,6 +270,7 @@ def extend_force_slash(
     global __patched
     assert not __patched, "This can only be called once."
     __patched = True
+    if check is None: check = lambda _: True
 
     # コマンドが作られた際にそのコマンドを呼び出すコマンドをtreeに登録する。
     original_command_init = commands.Command.__init__
@@ -292,7 +293,7 @@ def extend_force_slash(
             return
 
         # コマンドを実装するかのチェックをする。
-        if check is not None and not check(command): return
+        if not check(command): return
 
         _replace_atp(
             True, exceptions["replace_invalid_annotation_to_str"],
