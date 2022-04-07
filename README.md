@@ -22,7 +22,7 @@ The following is an example of creating a command called `ping` that works with 
 ```python
 from discord.ext.fslash import extend_force_slash
 
-# ...
+...
 
 bot = extend_force_slash(commands.Bot(command_prefix="fs!", intents=intents))
 
@@ -36,7 +36,7 @@ The following example creates the group commands `server-tool` and `entertainmen
 ```python
 from discord.ext.fslash import extend_force_slash
 
-# ...
+...
 
 bot = extend_force_slash(
     commands.Bot(command_prefix="fs!", intents=intents),
