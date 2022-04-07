@@ -1,9 +1,8 @@
 ".. include:: ../../../README.md" # discord-ext-fslash
 
 from __future__ import annotations
-from secrets import choice
 
-from typing import Callable, Iterable, Literal, Union, Optional, Any
+from typing import Callable, Iterable, Literal, Union, Optional, Any, DefaultDict
 
 from collections import defaultdict
 from string import octdigits
@@ -23,7 +22,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __author__ = "tasuren"
 
 
@@ -170,7 +169,7 @@ commands.core.run_converters = _new_run_converters # type: ignore
 
 groups = []
 "List containing group commands scheduled to be registered with a slash."
-exceptions = defaultdict[str, dict[Any, Exception]](dict)
+exceptions: DefaultDict[str, dict[Any, Exception]] = defaultdict(dict)
 "This dictionary is used to include errors when something failed but did not output an error."
 __patched = False
 def extend_force_slash(

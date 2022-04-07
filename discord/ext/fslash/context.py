@@ -1,5 +1,7 @@
 # discord-ext-ui - Context
 
+from __future__ import annotations
+
 from typing import Generic, Union, Optional, Any
 
 from datetime import datetime

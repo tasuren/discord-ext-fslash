@@ -18,6 +18,7 @@ class MyBot(commands.Bot):
     async def on_ready(self):
         print("sync")
         await self.tree.sync(guild=GUILD)
+        await self.tree.sync()
         print("I'm ready")
 
 

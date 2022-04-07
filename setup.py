@@ -40,16 +40,12 @@ setup(
     license='MIT',
     keywords='discord discord.py',
     packages=["discord.ext.fslash"],
-    package_data={
-        "discord.ext.fslash": ("py.typed",)
-    },
     install_requires=REQUIREMENTS,
     extras_requires={},
     python_requires='>=3.8.0',
     classifiers=[
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        'Typing :: Typed'
+        'Programming Language :: Python :: 3.10'
     ]
 )

@@ -1,7 +1,12 @@
 [![PyPI](https://img.shields.io/pypi/v/discord-ext-fslash)](https://pypi.org/project/discord-ext-fslash/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/discord-ext-fslash) ![PyPI - Downloads](https://img.shields.io/pypi/dm/discord-ext-fslash) ![PyPI - License](https://img.shields.io/pypi/l/discord-ext-fslash) [![Documentation Status](https://tasuren.github.io/discord-ext-fslash)](https://img.shields.io/github/workflow/status/tasuren/discord-ext-fslash/github-pages/gh-pages?label=docs) [![Discord](https://img.shields.io/discord/777430548951728149?label=chat&logo=discord)](https://discord.gg/kfMwZUyGFG) [![Buy Me a Coffee](https://img.shields.io/badge/-tasuren-E9EEF3?label=Buy%20Me%20a%20Coffee&logo=buymeacoffee)](https://www.buymeacoffee.com/tasuren)
 # discord-ext-fslash
-This library registers commands from the discord.py command framework as slash commands in discord.py 2.0 as well by doing a monkey patch.  
-**WARNING** Once again, the way this library works is a monkey patch and not without the possibility of unexpected behavior.
+This library registers commands from the discord.py command framework as slash commands in discord.py 2.0 as well by doing a monkey patch.
+
+**WARNING**  
+Again, the way this library works is a monkey patch and is not without the possibility of unexpected behavior.  
+Also, the 2.0 version of discord.py that supports slashes is still under development, and this library is being developed according to the specifications in that development phase.  
+Therefore, if there is a destructive update to discord.py, this library will not work until it is supported.  
+If you want to install version 2.0a now, you can do so by running: pip3 install -U git+https://github.com/Rapptz/discord.py`.
 
 ## Features
 It will support both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.
