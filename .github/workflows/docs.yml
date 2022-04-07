@@ -20,11 +20,11 @@ jobs:
         run: |
           pip install pdoc3
           pip install git+https://github.com/Rapptz/discord.py
-          pdoc --html -o tmp --force discord/ext/fslash
+          pdoc --html -o tmp/fslash --force discord/ext/fslash
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./tmp
+          publish_dir: ./tmp/fslash
