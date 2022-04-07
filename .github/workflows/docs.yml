@@ -1,4 +1,4 @@
-name: github-pages
+name: Make Document Pages
 
 on:
   push:
@@ -18,8 +18,8 @@ jobs:
           python-version: 3.9
       - name: Build
         run: |
-          pip install pdoc
-          pdoc -o tmp --force discord/ext/fslash
+          pip install pdoc3
+          pdoc --html -o tmp --force discord/ext/fslash
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
