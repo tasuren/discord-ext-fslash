@@ -6,7 +6,7 @@ This library registers commands from the discord.py command framework as slash c
 Again, the way this library works is a monkey patch and is not without the possibility of unexpected behavior.  
 Also, the 2.0 version of discord.py that supports slashes is still under development, and this library is being developed according to the specifications in that development phase.  
 Therefore, if there is a destructive update to discord.py, this library will not work until it is supported.  
-If you want to install version 2.0a now, you can do so by running: pip3 install -U git+https://github.com/Rapptz/discord.py`.
+If you want to install version 2.0a now, you can do so by running: `pip3 install -U git+https://github.com/Rapptz/discord.py`.
 
 ## Features
 It will support both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.
