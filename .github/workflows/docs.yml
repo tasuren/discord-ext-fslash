@@ -19,6 +19,7 @@ jobs:
       - name: Build
         run: |
           pip install pdoc3
+          pip install git+https://github.com/Rapptz/discord.py
           pdoc --html -o tmp --force discord/ext/fslash
 
       - name: Deploy
