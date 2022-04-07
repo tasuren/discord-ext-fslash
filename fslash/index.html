@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fslash API documentation</title>
+<meta name="description" content="[![PyPI](https://img.shields.io/pypi/v/discord-ext-fslash)](https://pypi.org/project/discord-ext-fslash/) ![PyPI - Python …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Package <code>fslash</code></h1>
+</header>
+<section id="section-intro">
+<p><a href="https://pypi.org/project/discord-ext-fslash/"><img alt="PyPI" src="https://img.shields.io/pypi/v/discord-ext-fslash"></a> <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/discord-ext-fslash"> <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/discord-ext-fslash"> <img alt="PyPI - License" src="https://img.shields.io/pypi/l/discord-ext-fslash"> <a href="https://img.shields.io/github/workflow/status/tasuren/discord-ext-fslash/github-pages/gh-pages?label=docs"><img alt="Documentation Status" src="https://tasuren.github.io/discord-ext-fslash"></a> <a href="https://discord.gg/kfMwZUyGFG"><img alt="Discord" src="https://img.shields.io/discord/777430548951728149?label=chat&amp;logo=discord"></a> <a href="https://www.buymeacoffee.com/tasuren"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/-tasuren-E9EEF3?label=Buy%20Me%20a%20Coffee&amp;logo=buymeacoffee"></a></p>
+<h1 id="discord-ext-fslash">discord-ext-fslash</h1>
+<p>This library registers commands from the discord.py command framework as slash commands in discord.py 2.0 as well by doing a monkey patch.</p>
+<p><strong>WARNING</strong><br>
+Again, the way this library works is a monkey patch and is not without the possibility of unexpected behavior.<br>
+Also, the 2.0 version of discord.py that supports slashes is still under development, and this library is being developed according to the specifications in that development phase.<br>
+Therefore, if there is a destructive update to discord.py, this library will not work until it is supported.<br>
+If you want to install version 2.0a now, you can do so by running: pip3 install -U git+<a href="https://github.com/Rapptz/discord.py`.">https://github.com/Rapptz/discord.py`.</a></p>
+<h2 id="features">Features</h2>
+<p>It will support both the cooldown and other decorators of the command framework and the <code>describe</code> decorator of the app command to work.
+Also, the converter will automatically replace to the <code>Transformer</code> of slash version.
+Even if you have too many commands and reach the maximum number of can be registered slash commands, we have a way to deal with it. (An example is below)</p>
+<h2 id="installation">Installation</h2>
+<p><code>pip install discord-ext-fslash</code></p>
+<h2 id="example">Example</h2>
+<h3 id="normal">Normal</h3>
+<p>The following is an example of creating a command called <code>ping</code> that works with both slash and message commands.</p>
+<pre><code class="language-python">from discord.ext.fslash import extend_force_slash
+
+...
+
+bot = extend_force_slash(commands.Bot(command_prefix=&quot;fs!&quot;, intents=intents))
+
+@bot.command()
+async def ping(ctx):
+    await ctx.reply(&quot;pong&quot;)
+</code></pre>
+<h3 id="split-commands-by-categories">Split Commands by Categories</h3>
+<p>Even if there are too many commands in the command framework to register in the slash, it provides a way to implement them all by making only the commands in the slash subcommands of the group command.<br>
+The following example creates the group commands <code>server-tool</code> and <code>entertainment</code> and sets up the commands in the command framework as subcommands of those commands.</p>
+<pre><code class="language-python">from discord.ext.fslash import extend_force_slash
+
+...
+
+bot = extend_force_slash(
+    commands.Bot(command_prefix=&quot;fs!&quot;, intents=intents),
+    first_groups=(
+        discord.app_commands.Group(name=&quot;server-tool&quot;),
+        discord.app_commands.Group(name=&quot;entertainment&quot;)
+    )
+)
+
+@bot.command(description=&quot;Ban member&quot;, fsparent=&quot;server-tool&quot;)
+@commands.has_guild_permissions(ban_members=True)
+@commands.bot_has_guild_permissions(ban_members=True)
+@commands.cooldown(1, 10, commands.BucketType.guild)
+@discord.app_commands.describe(member=&quot;Member to be banned&quot;)
+async def ban(ctx, *, member: discord.Member):
+    # `/server-tool ban member: ...` or `fs!ban ...` to run this command.
+    await ctx.trigger_typing()
+    await member.ban()
+    await ctx.reply(&quot;pong&quot;)
+
+@bot.command(description=&quot;Make wow&quot;, fsparent=&quot;entertainment&quot;)
+async def wow(ctx):
+    # `/entertainment wow` or `fs!wow` to run this command.
+    await ctx.reply(&quot;wow&quot;)
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<p>There are features to improve compatibility for greater convenience.<br>
+See the <a href="https://tasuren.github.io/discord-ext-fslash">documentation</a> for details.
+</p>
+<h2 id="contributing">Contributing</h2>
+<p>Issues and PullRequests should be brief in content.<br>
+The code should be similar in style to the current code.<br>
+Please limit all text to 100 characters per line if possible, except for comments.<br>
+For comments, please limit to 200 characters per line if possible.</p>
+<h2 id="license">License</h2>
+<p>MIT</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;.. include:: ../../../README.md&#34; # discord-ext-fslash
+
+from __future__ import annotations
+
+from typing import Callable, Iterable, Literal, Union, Optional, Any, DefaultDict
+
+from collections import defaultdict
+from string import octdigits
+from re import sub
+import inspect
+
+from discord.ext import commands
+from discord import app_commands
+import discord
+
+from ._types import AdjustmentNameMode, BotT, TriggerTypingMode, InteractionResponseMode
+from .context import Context, is_fslash
+
+
+__all__ = (
+    &#34;extend_force_slash&#34;, &#34;is_fslash&#34;, &#34;Context&#34;, &#34;AdjustmentNameMode&#34;,
+    &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;, &#34;TriggerTypingMode&#34;,
+    &#34;InteractionResponseMode&#34;
+)
+__version__ = &#34;0.1.0&#34;
+__author__ = &#34;tasuren&#34;
+
+
+VALID_COMMAND_NAME_CHARACTERS_WITHOUT_LETTERS = f&#34;{octdigits}-_&#34;
+def adjustment_command_name(name: str, mode: AdjustmentNameMode) -&gt; str:
+    &#34;&#34;&#34;Prepares the passed string into a string that can be used as the name of a slash command.
+
+    Parameters
+    ----------
+    name : str
+        Adjustment target.
+    mode : AdjustmentNameMode
+        It is either a snake case or a kebab case.&#34;&#34;&#34;
+    sandwiched = &#34;_&#34; if mode == AdjustmentNameMode.SNAKE_CASE else &#34;-&#34;
+    return &#34;&#34;.join(
+        char
+        for char in sub(
+            &#34;(.[A-Z])&#34;, lambda x: f&#34;{x.group(1)[0]}{sandwiched}{x.group(1)[1]}&#34;, name.lower()
+        ).lower()
+        if char in VALID_COMMAND_NAME_CHARACTERS_WITHOUT_LETTERS
+    )[:32]
+
+
+_bot = None
+_context_kwargs = {}
+
+
+# ConverterのアノテーションをTransformerに交換するようにする。
+_original_evaluate_annotation = discord.utils.evaluate_annotation
+def _new_evaluate_annotation(*args, **kwargs):
+    annotation = _original_evaluate_annotation(*args, **kwargs)
+    if commands.Converter in getattr(annotation, &#34;__mro__&#34;, ()):
+        converter = annotation()
+        # Converterを実行するTransformerです。
+        class ConverterTransformer(app_commands.Transformer):
+
+            # コマンドフレームワークで実行された際には、元のコンバーターを実行できるように元を取って置く。
+            __fslash_original_annotation__ = annotation
+
+            @classmethod
+            async def transform(cls, interaction, value: str):
+                return await converter.convert(
+                    Context(interaction, {}, None, _bot, **_context_kwargs), value
+                )
+        annotation = app_commands.Transform[None, ConverterTransformer]
+    return annotation
+discord.utils.evaluate_annotation = _new_evaluate_annotation
+
+
+_original_atp = app_commands.transformers.annotation_to_parameter
+_original_signature = inspect.signature
+def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats: bool = False):
+    # `annotation_to_parameter`の実行が失敗した際に`str`として扱うようにする関数です。
+    # それと、inspectの`signature`もアノテーションがない場合は拡張します。
+    if toggle:
+        def new_atp(annotation, parameter):
+            if riats:
+                try:
+                    return _original_atp(annotation, parameter)
+                except Exception as e:
+                    # 失敗したなら`str`のアノテーションにする。
+                    if failed_annotations is not None:
+                        failed_annotations[annotation] = e
+                    return _original_atp(str, parameter)
+            else:
+                return _original_atp(annotation, parameter)
+        app_commands.transformers.annotation_to_parameter = new_atp
+
+        def new_signature(*args, **kwargs):
+            signature = _original_signature(*args, **kwargs)
+            ok = False
+            new = []
+            for name, parameter in list(signature.parameters.items()):
+                if name == &#34;ctx&#34;:
+                    ok = True
+                new.append(parameter)
+                if ok and parameter.annotation == parameter.empty:
+                    # アノテーションがない場合は`str`を設定して置く。
+                    new[-1] = parameter.replace(annotation=str)
+            return signature.replace(parameters=new) if ok else signature
+        inspect.signature = new_signature
+    else:
+        app_commands.transformers.annotation_to_parameter = _original_atp
+        inspect.signature = _original_signature
+
+
+def _get(command, key, default):
+    # コマンドオブジェクトの`__original_kwargs__`か`extras`から特定の値を取り出します。
+    return command.__original_kwargs__.get(key, default) \
+        or command.extras.get(key, default)
+
+
+# `parse_arguments`で何も実行しないようにする。
+_original_parse_arguments = commands.Command._parse_arguments
+async def _new_parse_arguments(self, ctx):
+    if is_fslash(ctx) and not getattr(ctx, &#34;__fslash_do_original_pa__&#34;, False):
+        ctx.args = (ctx.command.cog, ctx) if ctx.command.cog else (ctx,)
+    else:
+        return await _original_parse_arguments(self, ctx)
+setattr(commands.Command, &#34;_parse_arguments&#34;, _new_parse_arguments)
+
+
+async def _run_command(bot, interaction, command, content, **kwargs) -&gt; None:
+    # Run command
+    ctx = Context(interaction, kwargs, command, bot, **_context_kwargs)
+    if content is not None:
+        ctx.view = type(ctx.view)(content)
+        setattr(ctx, &#34;__fslash_do_original_pa__&#34;, True)
+    # Choiceは`value`の値に置き換える。
+    for key, value in list(kwargs.items()):
+        if isinstance(value, app_commands.Choice):
+            kwargs[key] = value.value
+    try:
+        await command.invoke(ctx) # type: ignore
+    except Exception as e:
+        bot.dispatch(&#34;command_error&#34;, ctx, e)
+
+
+def _apply_describe(command):
+    # `describe`等で付けられたデータを`callback`にも適用させる。
+    for name, value in filter(
+        lambda x: x[0].startswith(&#34;__discord_app_commands&#34;),
+        command.__dict__.items()
+    ):
+        setattr(command.callback, name, value)
+
+
+_original_run_converter = commands.core.run_converters # type: ignore
+async def _new_run_converters(ctx, converter, argument, param):
+    origin = getattr(converter, &#34;__origin__&#34;, None)
+    if origin is app_commands.Choice and hasattr(
+        ctx.command.callback, &#34;__fslash_param_choices__&#34;
+    ):
+        # ChoiceをLiteralに交換する。
+        if choices := ctx.command.callback.__fslash_param_choices__.get(param.name):
+            converter = Literal[0]
+            setattr(converter, &#34;__args__&#34;, tuple(choice.value for choice in choices))
+    elif isinstance(converter, app_commands.transformers._TransformMetadata):
+        # TransformはConverterに置き換える。
+        converter = getattr(converter.metadata, &#34;__fslash_original_annotation__&#34;)
+    return await _original_run_converter(ctx, converter, argument, param)
+commands.core.run_converters = _new_run_converters # type: ignore
+
+
+groups = []
+&#34;List containing group commands scheduled to be registered with a slash.&#34;
+exceptions: DefaultDict[str, dict[Any, Exception]] = defaultdict(dict)
+&#34;This dictionary is used to include errors when something failed but did not output an error.&#34;
+__patched = False
+def extend_force_slash(
+    bot: BotT, *,
+    check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None,
+    adjustment_name: Optional[AdjustmentNameMode] = None,
+    replace_invalid_annotation_to_str: bool = False,
+    default_description: str = &#34;...&#34;, first_groups: Optional[Iterable[app_commands.Group]] = None,
+    context_kwargs: Optional[dict] = None
+) -&gt; BotT:
+    &#34;&#34;&#34;This class forces commands in the command framework bot to be registered even if they are slash commands.
+
+    Parameters
+    ----------
+    bot : discord.ext.commands.bot.Bot
+        Target Bot.
+    check : Callable[[Union[commands.Command, commands.Group]], bool], optional
+        Function used to check if a command should be added.  
+        This is useful if you do not want some commands to be registered as slashes.
+    adjustment_name : AdjustmentNameMode, optional
+        Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.  
+        If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.
+    replace_invalid_annotation_to_str : bool, default False
+        Whether invalid annotations as slashes are automatically set to `str`.  
+        The default is `False`, but if you have a lot of commands and are not confident that all the annotations are correct and do not have the energy to fix the wrong ones, you can use this.  
+        When automatically exchanged for `str`, the error is written to `fslash.exceptions[&#34;annotation&#34;]`.  
+        If you think something is wrong, check here.
+    default_description : str, default &#34;...&#34;
+        This is the string to put in place when an empty description is encountered.
+    first_groups : Iterable[discord.app_commands.Group], optional
+        This is a list of group commands to be registered first.  
+        If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
+        How to do it is described in the Notes of this function.
+    context_kwargs : dict, optional
+        Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
+        Detail is here: `Context`
+
+    Warnings
+    --------
+    This function performs a monkey patch so that the command framework command is registered as a slash at runtime.  
+    It also temporarily replaces the command framework command object and the `signature` of the standard library `inspect` with another one.  
+    We will try to avoid interfering with other libraries as much as possible, but we can&#39;t guarantee that we won&#39;t, so please understand that and use it accordingly.  
+    And you can only call this function once.
+
+    Notes
+    -----
+    One may wonder if decorators such as `app_commands.describe` can be used, but of course they can.  
+    Also, the command framework checks work.  
+    The converter is automatically replaced by `app_commands.Transformer`.  
+    Cooldown also works.  
+    However, the decorator must be placed below `command`.  
+    If you have a lot of nested commands like group command of group command of group command... you can&#39;t register them in the slash as they should be.  
+    If such a command is encountered, it will take the subcommands after the unregistrable subcommand as arguments.  
+    Example: `/group level1 level2 content: level3 level4 ...`
+
+    The number of slash commands registered may exceed the maximum number of slash commands registered as commands in the command framework.  
+    In that case, use the `first_groups` argument.  
+    The command in the list of group commands passed to this argument can be set as the parent command of the command framework command.  
+    To do this, simply enter the name of the parent command as `fsparent` in the command framework command argument or `extras` argument.  
+    Example:  
+    ```python
+    bot = extend_force_slash(
+        commands.Bot(command_prefix=&#34;t!&#34;, intents=intents),
+        first_groups=(
+            discord.app_commands.Group(
+                name=&#34;server-tool&#34;, description=&#34;Some commands are useful for server operation.&#34;
+            ),
+        )
+    )
+
+
+    @bot.command(fsparent=&#34;server-tool&#34;) # or `extras={&#34;fsparent&#34;: &#34;server-tool&#34;}`
+    async def normal(ctx):
+        &#34;This command can be called by run `/server-tool normal`.&#34;
+    ```
+
+    You can also specify a guild.  
+    Just pass a value for the `guild` argument, similar to `guild` in `CommandTree.command`.  
+    (Or you can pass `guild` as a key to `extras`).  
+    Group commands can also be passed in the same way as `app_commands.Group`. (`guild_ids`)  
+    ```python
+    @bot.command(guild=GUILD_ID)
+    async def test(ctx):
+        ...
+    ```
+
+    You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
+    Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.
+    And the value of the argument at runtime will be the value of `Choice.value`, not `Choice`.&#34;&#34;&#34;
+    global _bot, groups, exceptions, _context_kwargs
+    _context_kwargs.update(context_kwargs or {})
+    _bot = bot
+    if first_groups is not None:
+        for g in first_groups:
+            groups.append(g)
+
+    global __patched
+    assert not __patched, &#34;This can only be called once.&#34;
+    __patched = True
+    if check is None: check = lambda _: True
+
+    # コマンドが作られた際にそのコマンドを呼び出すコマンドをtreeに登録する。
+    original_command_init = commands.Command.__init__
+    def command_new_init(command: commands.Command, func, /, **kwargs):
+        if not (cog_mode := kwargs.pop(&#34;__cog_mode__&#34;, False)):
+            original_command_init(command, func, **kwargs)
+
+        # コグに実装されているコマンドの場合はコグが追加された後にスラッシュとして登録する。
+        # 理由は内部でコピーを行うためここが(多分)二回呼ばれてしまうためで、それを対策しようとするととてもめんどくさいことになってしまうから。
+        if command.callback.__code__.co_varnames[0] == &#34;self&#34; and not cog_mode:
+            if not isinstance(command, commands.Group):
+                _apply_describe(command)
+            return
+
+        # もしNestしすぎたグループコマンドのコマンドの場合はパスする。この`__fslash_*_*__`は下で作られます。
+        if command.parent is not None and getattr(
+            command.parent, &#34;__fslash_max_parent__&#34;, False
+        ):
+            setattr(command, &#34;__fslash_max_parent__&#34;, True)
+            return
+
+        # コマンドを実装するかのチェックをする。
+        if not check(command): return
+
+        _replace_atp(
+            True, exceptions[&#34;replace_invalid_annotation_to_str&#34;],
+            replace_invalid_annotation_to_str
+        )
+
+        # もし親のグループが指定されているのならそれを探し出す。
+        parent = None
+        fsparent = _get(command, &#34;fsparent&#34;, None)
+        for group in groups:
+            if fsparent == group.name:
+                parent = group
+                break
+        else:
+            assert fsparent is None, f&#34;A group command that has not yet been registered as a parent command in `{command}` has been specified.&#34;
+        # もしコマンドフレームワークのグループコマンドのサブコマンドの場合は、親コマンドのスラッシュのグループコマンドを、スラッシュでも親コマンドとする。
+        if parent is None and command.parent is not None:
+            parent = getattr(command.parent, &#34;__fslash__&#34;)
+        # choiceのデータをコマンドフレームワークのコマンド実行時にLiteralに交換するので取って置く。
+        if hasattr(command.callback, &#34;__discord_app_commands_param_choices__&#34;):
+            setattr(
+                command._callback, &#34;__fslash_param_choices__&#34;,
+                getattr(
+                    command.callback, &#34;__discord_app_commands_param_choices__&#34;, None
+                ).copy() # type: ignore
+            )
+        # スラッシュコマンドを作る。
+        name = command.name if adjustment_name is None \
+            else adjustment_command_name(command.name, adjustment_name)
+        if isinstance(command, commands.Group):
+            try:
+                groups.append(app_commands.Group(
+                    name=name,
+                    description=command.description or default_description,
+                    parent=parent, guild_ids=_get(command, &#34;guild_ids&#34;, None)
+                ))
+            except ValueError:
+                # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
+                assert isinstance(parent, app_commands.Group)
+                @parent.command(
+                    name=name, description=command.description or default_description
+                )
+                async def alternative_for_nested(
+                    interaction: discord.Interaction, content: str
+                ):
+                    await _run_command(bot, interaction, command, content)
+                setattr(command, &#34;__fslash_max_parent__&#34;, True)
+            setattr(command, &#34;__fslash__&#34;, groups[-1])
+        else:
+            _apply_describe(command)
+            # スラッシュコマンドを作る。
+            app_command: app_commands.Command = (bot.tree.command if parent is None else parent.command)(
+                name=name, description=command.description or default_description,
+                **(dict(
+                    guild=_get(command, &#34;guild&#34;, discord.utils.MISSING), guilds=_get(
+                        command, &#34;guilds&#34;, discord.utils.MISSING
+                    )
+                ) if parent is None else {})
+            )(command.callback) # type: ignore
+            setattr(command, &#34;__fslash__&#34;, app_command)
+
+            # 実行される関数を用意する。
+            async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
+                await _run_command(bot, interaction, command, None, **kwargs)
+            setattr(app_command, &#34;_callback&#34;, inner_function)
+
+
+        _replace_atp(False, None, replace_invalid_annotation_to_str)
+    setattr(commands.Command, &#34;__init__&#34;, command_new_init)
+
+    # コグ追加時に、コグに実装されているコマンドをスラッシュで登録する。
+    original_inject = commands.Cog._inject
+    def new_inject(self: commands.Cog, *args, **kwargs):
+        for command in self.__cog_commands__:
+            command_new_init(command, command.callback, __cog_mode__=True)
+        return original_inject(self, *args, **kwargs)
+    commands.Cog._inject = new_inject
+
+    # コマンドが削除された時はスラッシュコマンドも削除する。
+    def command_new_del(command: commands.Command):
+        slash: Optional[app_commands.Command] = getattr(command, &#34;__fslash__&#34;, None);
+        if slash is not None:
+            if slash.parent is None:
+                bot.tree.remove_command(slash) # type: ignore
+            else:
+                slash.parent.remove_command(slash) # type: ignore
+    setattr(commands.Command, &#34;__del__&#34;, command_new_del)
+
+    # `sync`が実行された際に`groups`にあるものを追加するようにする。
+    original_sync = app_commands.CommandTree.sync
+    async def new_sync(self, *, guild=None):
+        for group in groups:
+            if not getattr(group, &#34;__synced__&#34;, False) \
+                    and group.parent is None:
+                bot.tree.add_command(group)
+                setattr(group, &#34;__synced__&#34;, True)
+        return await original_sync(self, guild=guild)
+    app_commands.CommandTree.sync = new_sync
+
+    return bot</code></pre>
+</details>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="fslash.context" href="context.html">fslash.context</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="fslash.exceptions"><code class="name">var <span class="ident">exceptions</span> : DefaultDict[str, dict[Any, Exception]]</code></dt>
+<dd>
+<div class="desc"><p>This dictionary is used to include errors when something failed but did not output an error.</p></div>
+</dd>
+<dt id="fslash.groups"><code class="name">var <span class="ident">groups</span></code></dt>
+<dd>
+<div class="desc"><p>List containing group commands scheduled to be registered with a slash.</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="fslash.adjustment_command_name"><code class="name flex">
+<span>def <span class="ident">adjustment_command_name</span></span>(<span>name: str, mode: <a title="fslash.AdjustmentNameMode" href="#fslash.AdjustmentNameMode">AdjustmentNameMode</a>) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Prepares the passed string into a string that can be used as the name of a slash command.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Adjustment target.</dd>
+<dt><strong><code>mode</code></strong> :&ensp;<code><a title="fslash.AdjustmentNameMode" href="#fslash.AdjustmentNameMode">AdjustmentNameMode</a></code></dt>
+<dd>It is either a snake case or a kebab case.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def adjustment_command_name(name: str, mode: AdjustmentNameMode) -&gt; str:
+    &#34;&#34;&#34;Prepares the passed string into a string that can be used as the name of a slash command.
+
+    Parameters
+    ----------
+    name : str
+        Adjustment target.
+    mode : AdjustmentNameMode
+        It is either a snake case or a kebab case.&#34;&#34;&#34;
+    sandwiched = &#34;_&#34; if mode == AdjustmentNameMode.SNAKE_CASE else &#34;-&#34;
+    return &#34;&#34;.join(
+        char
+        for char in sub(
+            &#34;(.[A-Z])&#34;, lambda x: f&#34;{x.group(1)[0]}{sandwiched}{x.group(1)[1]}&#34;, name.lower()
+        ).lower()
+        if char in VALID_COMMAND_NAME_CHARACTERS_WITHOUT_LETTERS
+    )[:32]</code></pre>
+</details>
+</dd>
+<dt id="fslash.extend_force_slash"><code class="name flex">
+<span>def <span class="ident">extend_force_slash</span></span>(<span>bot: BotT, *, check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None, adjustment_name: Optional[<a title="fslash.AdjustmentNameMode" href="#fslash.AdjustmentNameMode">AdjustmentNameMode</a>] = None, replace_invalid_annotation_to_str: bool = False, default_description: str = '...', first_groups: Optional[Iterable[app_commands.Group]] = None, context_kwargs: Optional[dict] = None) ‑> ~BotT</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This class forces commands in the command framework bot to be registered even if they are slash commands.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>bot</code></strong> :&ensp;<code>discord.ext.commands.bot.Bot</code></dt>
+<dd>Target Bot.</dd>
+<dt><strong><code>check</code></strong> :&ensp;<code>Callable[[Union[commands.Command, commands.Group]], bool]</code>, optional</dt>
+<dd>Function used to check if a command should be added.<br>
+This is useful if you do not want some commands to be registered as slashes.</dd>
+<dt><strong><code>adjustment_name</code></strong> :&ensp;<code><a title="fslash.AdjustmentNameMode" href="#fslash.AdjustmentNameMode">AdjustmentNameMode</a></code>, optional</dt>
+<dd>Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.<br>
+If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.</dd>
+<dt><strong><code>replace_invalid_annotation_to_str</code></strong> :&ensp;<code>bool</code>, default <code>False</code></dt>
+<dd>Whether invalid annotations as slashes are automatically set to <code>str</code>.<br>
+The default is <code>False</code>, but if you have a lot of commands and are not confident that all the annotations are correct and do not have the energy to fix the wrong ones, you can use this.<br>
+When automatically exchanged for <code>str</code>, the error is written to <code>fslash.exceptions["annotation"]</code>.<br>
+If you think something is wrong, check here.</dd>
+<dt><strong><code>default_description</code></strong> :&ensp;<code>str</code>, default <code>"..."</code></dt>
+<dd>This is the string to put in place when an empty description is encountered.</dd>
+<dt><strong><code>first_groups</code></strong> :&ensp;<code>Iterable[discord.app_commands.Group]</code>, optional</dt>
+<dd>This is a list of group commands to be registered first.<br>
+If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.<br>
+How to do it is described in the Notes of this function.</dd>
+<dt><strong><code>context_kwargs</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>Keyword arguments to be passed to the arguments after <code>trigger_typing_mode</code> of <code><a title="fslash.context.Context" href="context.html#fslash.context.Context">Context</a></code>.<br>
+Detail is here: <code><a title="fslash.Context" href="#fslash.Context">Context</a></code></dd>
+</dl>
+<h2 id="warnings">Warnings</h2>
+<p>This function performs a monkey patch so that the command framework command is registered as a slash at runtime.<br>
+It also temporarily replaces the command framework command object and the <code>signature</code> of the standard library <code>inspect</code> with another one.<br>
+We will try to avoid interfering with other libraries as much as possible, but we can't guarantee that we won't, so please understand that and use it accordingly.<br>
+And you can only call this function once.</p>
+<h2 id="notes">Notes</h2>
+<p>One may wonder if decorators such as <code>app_commands.describe</code> can be used, but of course they can.<br>
+Also, the command framework checks work.<br>
+The converter is automatically replaced by <code>app_commands.Transformer</code>.<br>
+Cooldown also works.<br>
+However, the decorator must be placed below <code>command</code>.<br>
+If you have a lot of nested commands like group command of group command of group command&hellip; you can't register them in the slash as they should be.<br>
+If such a command is encountered, it will take the subcommands after the unregistrable subcommand as arguments.<br>
+Example: <code>/group level1 level2 content: level3 level4 ...</code></p>
+<p>The number of slash commands registered may exceed the maximum number of slash commands registered as commands in the command framework.<br>
+In that case, use the <code>first_groups</code> argument.<br>
+The command in the list of group commands passed to this argument can be set as the parent command of the command framework command.<br>
+To do this, simply enter the name of the parent command as <code>fsparent</code> in the command framework command argument or <code>extras</code> argument.<br>
+Example:
+</p>
+<pre><code class="language-python">bot = extend_force_slash(
+    commands.Bot(command_prefix=&quot;t!&quot;, intents=intents),
+    first_groups=(
+        discord.app_commands.Group(
+            name=&quot;server-tool&quot;, description=&quot;Some commands are useful for server operation.&quot;
+        ),
+    )
+)
+
+
+@bot.command(fsparent=&quot;server-tool&quot;) # or `extras={&quot;fsparent&quot;: &quot;server-tool&quot;}`
+async def normal(ctx):
+    &quot;This command can be called by run `/server-tool normal`.&quot;
+</code></pre>
+<p>You can also specify a guild.<br>
+Just pass a value for the <code>guild</code> argument, similar to <code>guild</code> in <code>CommandTree.command</code>.<br>
+(Or you can pass <code>guild</code> as a key to <code>extras</code>).<br>
+Group commands can also be passed in the same way as <code>app_commands.Group</code>. (<code>guild_ids</code>)
+</p>
+<pre><code class="language-python">@bot.command(guild=GUILD_ID)
+async def test(ctx):
+    ...
+</code></pre>
+<p>You can change which methods return interaction responses and how <code><a title="fslash.Context.trigger_typing" href="#fslash.Context.trigger_typing">Context.trigger_typing()</a></code> behaves by passing a value to <code><a title="fslash.Context" href="#fslash.Context">Context</a></code> with the <code>context_kwargs</code> argument.
+Also, <code>discord.app_commands.Choice</code> is replaced by <code>Literal</code> in the command framework commands.
+And the value of the argument at runtime will be the value of <code>Choice.value</code>, not <code>Choice</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extend_force_slash(
+    bot: BotT, *,
+    check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None,
+    adjustment_name: Optional[AdjustmentNameMode] = None,
+    replace_invalid_annotation_to_str: bool = False,
+    default_description: str = &#34;...&#34;, first_groups: Optional[Iterable[app_commands.Group]] = None,
+    context_kwargs: Optional[dict] = None
+) -&gt; BotT:
+    &#34;&#34;&#34;This class forces commands in the command framework bot to be registered even if they are slash commands.
+
+    Parameters
+    ----------
+    bot : discord.ext.commands.bot.Bot
+        Target Bot.
+    check : Callable[[Union[commands.Command, commands.Group]], bool], optional
+        Function used to check if a command should be added.  
+        This is useful if you do not want some commands to be registered as slashes.
+    adjustment_name : AdjustmentNameMode, optional
+        Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.  
+        If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.
+    replace_invalid_annotation_to_str : bool, default False
+        Whether invalid annotations as slashes are automatically set to `str`.  
+        The default is `False`, but if you have a lot of commands and are not confident that all the annotations are correct and do not have the energy to fix the wrong ones, you can use this.  
+        When automatically exchanged for `str`, the error is written to `fslash.exceptions[&#34;annotation&#34;]`.  
+        If you think something is wrong, check here.
+    default_description : str, default &#34;...&#34;
+        This is the string to put in place when an empty description is encountered.
+    first_groups : Iterable[discord.app_commands.Group], optional
+        This is a list of group commands to be registered first.  
+        If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
+        How to do it is described in the Notes of this function.
+    context_kwargs : dict, optional
+        Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
+        Detail is here: `Context`
+
+    Warnings
+    --------
+    This function performs a monkey patch so that the command framework command is registered as a slash at runtime.  
+    It also temporarily replaces the command framework command object and the `signature` of the standard library `inspect` with another one.  
+    We will try to avoid interfering with other libraries as much as possible, but we can&#39;t guarantee that we won&#39;t, so please understand that and use it accordingly.  
+    And you can only call this function once.
+
+    Notes
+    -----
+    One may wonder if decorators such as `app_commands.describe` can be used, but of course they can.  
+    Also, the command framework checks work.  
+    The converter is automatically replaced by `app_commands.Transformer`.  
+    Cooldown also works.  
+    However, the decorator must be placed below `command`.  
+    If you have a lot of nested commands like group command of group command of group command... you can&#39;t register them in the slash as they should be.  
+    If such a command is encountered, it will take the subcommands after the unregistrable subcommand as arguments.  
+    Example: `/group level1 level2 content: level3 level4 ...`
+
+    The number of slash commands registered may exceed the maximum number of slash commands registered as commands in the command framework.  
+    In that case, use the `first_groups` argument.  
+    The command in the list of group commands passed to this argument can be set as the parent command of the command framework command.  
+    To do this, simply enter the name of the parent command as `fsparent` in the command framework command argument or `extras` argument.  
+    Example:  
+    ```python
+    bot = extend_force_slash(
+        commands.Bot(command_prefix=&#34;t!&#34;, intents=intents),
+        first_groups=(
+            discord.app_commands.Group(
+                name=&#34;server-tool&#34;, description=&#34;Some commands are useful for server operation.&#34;
+            ),
+        )
+    )
+
+
+    @bot.command(fsparent=&#34;server-tool&#34;) # or `extras={&#34;fsparent&#34;: &#34;server-tool&#34;}`
+    async def normal(ctx):
+        &#34;This command can be called by run `/server-tool normal`.&#34;
+    ```
+
+    You can also specify a guild.  
+    Just pass a value for the `guild` argument, similar to `guild` in `CommandTree.command`.  
+    (Or you can pass `guild` as a key to `extras`).  
+    Group commands can also be passed in the same way as `app_commands.Group`. (`guild_ids`)  
+    ```python
+    @bot.command(guild=GUILD_ID)
+    async def test(ctx):
+        ...
+    ```
+
+    You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
+    Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.
+    And the value of the argument at runtime will be the value of `Choice.value`, not `Choice`.&#34;&#34;&#34;
+    global _bot, groups, exceptions, _context_kwargs
+    _context_kwargs.update(context_kwargs or {})
+    _bot = bot
+    if first_groups is not None:
+        for g in first_groups:
+            groups.append(g)
+
+    global __patched
+    assert not __patched, &#34;This can only be called once.&#34;
+    __patched = True
+    if check is None: check = lambda _: True
+
+    # コマンドが作られた際にそのコマンドを呼び出すコマンドをtreeに登録する。
+    original_command_init = commands.Command.__init__
+    def command_new_init(command: commands.Command, func, /, **kwargs):
+        if not (cog_mode := kwargs.pop(&#34;__cog_mode__&#34;, False)):
+            original_command_init(command, func, **kwargs)
+
+        # コグに実装されているコマンドの場合はコグが追加された後にスラッシュとして登録する。
+        # 理由は内部でコピーを行うためここが(多分)二回呼ばれてしまうためで、それを対策しようとするととてもめんどくさいことになってしまうから。
+        if command.callback.__code__.co_varnames[0] == &#34;self&#34; and not cog_mode:
+            if not isinstance(command, commands.Group):
+                _apply_describe(command)
+            return
+
+        # もしNestしすぎたグループコマンドのコマンドの場合はパスする。この`__fslash_*_*__`は下で作られます。
+        if command.parent is not None and getattr(
+            command.parent, &#34;__fslash_max_parent__&#34;, False
+        ):
+            setattr(command, &#34;__fslash_max_parent__&#34;, True)
+            return
+
+        # コマンドを実装するかのチェックをする。
+        if not check(command): return
+
+        _replace_atp(
+            True, exceptions[&#34;replace_invalid_annotation_to_str&#34;],
+            replace_invalid_annotation_to_str
+        )
+
+        # もし親のグループが指定されているのならそれを探し出す。
+        parent = None
+        fsparent = _get(command, &#34;fsparent&#34;, None)
+        for group in groups:
+            if fsparent == group.name:
+                parent = group
+                break
+        else:
+            assert fsparent is None, f&#34;A group command that has not yet been registered as a parent command in `{command}` has been specified.&#34;
+        # もしコマンドフレームワークのグループコマンドのサブコマンドの場合は、親コマンドのスラッシュのグループコマンドを、スラッシュでも親コマンドとする。
+        if parent is None and command.parent is not None:
+            parent = getattr(command.parent, &#34;__fslash__&#34;)
+        # choiceのデータをコマンドフレームワークのコマンド実行時にLiteralに交換するので取って置く。
+        if hasattr(command.callback, &#34;__discord_app_commands_param_choices__&#34;):
+            setattr(
+                command._callback, &#34;__fslash_param_choices__&#34;,
+                getattr(
+                    command.callback, &#34;__discord_app_commands_param_choices__&#34;, None
+                ).copy() # type: ignore
+            )
+        # スラッシュコマンドを作る。
+        name = command.name if adjustment_name is None \
+            else adjustment_command_name(command.name, adjustment_name)
+        if isinstance(command, commands.Group):
+            try:
+                groups.append(app_commands.Group(
+                    name=name,
+                    description=command.description or default_description,
+                    parent=parent, guild_ids=_get(command, &#34;guild_ids&#34;, None)
+                ))
+            except ValueError:
+                # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
+                assert isinstance(parent, app_commands.Group)
+                @parent.command(
+                    name=name, description=command.description or default_description
+                )
+                async def alternative_for_nested(
+                    interaction: discord.Interaction, content: str
+                ):
+                    await _run_command(bot, interaction, command, content)
+                setattr(command, &#34;__fslash_max_parent__&#34;, True)
+            setattr(command, &#34;__fslash__&#34;, groups[-1])
+        else:
+            _apply_describe(command)
+            # スラッシュコマンドを作る。
+            app_command: app_commands.Command = (bot.tree.command if parent is None else parent.command)(
+                name=name, description=command.description or default_description,
+                **(dict(
+                    guild=_get(command, &#34;guild&#34;, discord.utils.MISSING), guilds=_get(
+                        command, &#34;guilds&#34;, discord.utils.MISSING
+                    )
+                ) if parent is None else {})
+            )(command.callback) # type: ignore
+            setattr(command, &#34;__fslash__&#34;, app_command)
+
+            # 実行される関数を用意する。
+            async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
+                await _run_command(bot, interaction, command, None, **kwargs)
+            setattr(app_command, &#34;_callback&#34;, inner_function)
+
+
+        _replace_atp(False, None, replace_invalid_annotation_to_str)
+    setattr(commands.Command, &#34;__init__&#34;, command_new_init)
+
+    # コグ追加時に、コグに実装されているコマンドをスラッシュで登録する。
+    original_inject = commands.Cog._inject
+    def new_inject(self: commands.Cog, *args, **kwargs):
+        for command in self.__cog_commands__:
+            command_new_init(command, command.callback, __cog_mode__=True)
+        return original_inject(self, *args, **kwargs)
+    commands.Cog._inject = new_inject
+
+    # コマンドが削除された時はスラッシュコマンドも削除する。
+    def command_new_del(command: commands.Command):
+        slash: Optional[app_commands.Command] = getattr(command, &#34;__fslash__&#34;, None);
+        if slash is not None:
+            if slash.parent is None:
+                bot.tree.remove_command(slash) # type: ignore
+            else:
+                slash.parent.remove_command(slash) # type: ignore
+    setattr(commands.Command, &#34;__del__&#34;, command_new_del)
+
+    # `sync`が実行された際に`groups`にあるものを追加するようにする。
+    original_sync = app_commands.CommandTree.sync
+    async def new_sync(self, *, guild=None):
+        for group in groups:
+            if not getattr(group, &#34;__synced__&#34;, False) \
+                    and group.parent is None:
+                bot.tree.add_command(group)
+                setattr(group, &#34;__synced__&#34;, True)
+        return await original_sync(self, guild=guild)
+    app_commands.CommandTree.sync = new_sync
+
+    return bot</code></pre>
+</details>
+</dd>
+<dt id="fslash.is_fslash"><code class="name flex">
+<span>def <span class="ident">is_fslash</span></span>(<span>context: Union[<a title="fslash.Context" href="#fslash.Context">Context</a>, commands.Context]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if the specified Context is defined by fslash.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>context</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="notes">Notes</h2>
+<p>All it does is check if the attribute <code>interaction</code> is in the <code><a title="fslash.Context" href="#fslash.Context">Context</a></code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_fslash(context: Union[Context, commands.Context]) -&gt; bool:
+    &#34;&#34;&#34;Checks if the specified Context is defined by fslash.
+
+    Parameters
+    ----------
+    context
+
+    Notes
+    -----
+    All it does is check if the attribute `interaction` is in the `Context`.&#34;&#34;&#34;
+    return hasattr(context, &#34;interaction&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fslash.AdjustmentNameMode"><code class="flex name class">
+<span>class <span class="ident">AdjustmentNameMode</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>It is how lib arrange the name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AdjustmentNameMode(Enum):
+    &#34;It is how lib arrange the name.&#34;
+
+    SNAKE_CASE = 1
+    KEBAB_CASE = 2</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fslash.AdjustmentNameMode.KEBAB_CASE"><code class="name">var <span class="ident">KEBAB_CASE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.AdjustmentNameMode.SNAKE_CASE"><code class="name">var <span class="ident">SNAKE_CASE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fslash.Context"><code class="flex name class">
+<span>class <span class="ident">Context</span></span>
+<span>(</span><span>interaction: discord.Interaction, kwargs: dict[str, Any], command: Optional[Union[commands.Command, commands.Group]] = None, bot: Optional[BotT] = None, interaction_response_mode: <a title="fslash.InteractionResponseMode" href="#fslash.InteractionResponseMode">InteractionResponseMode</a> = InteractionResponseMode.REPLY, trigger_typing_mode: <a title="fslash.TriggerTypingMode" href="#fslash.TriggerTypingMode">TriggerTypingMode</a> = TriggerTypingMode.DEFER_THINKING)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Context that is passed to the command framework commands at slash execution time instead.</p>
+<h2 id="warnings">Warnings</h2>
+<p>This is different from the usual <code>discord.ext.commands.Context</code>.<br>
+We have tried to make it as similar to the original Context as possible, but some of the commands in the command framework may behave unexpectedly.<br>
+It is recommended to check just in case.</p>
+<h2 id="note">Note</h2>
+<p>The following are attributes that are guaranteed to work.</p>
+<ul>
+<li>bot</li>
+<li>guild</li>
+<li>author</li>
+<li>channel</li>
+<li>cog</li>
+<li>me</li>
+<li>voice_client</li>
+<li>send</li>
+<li>reply</li>
+<li>trigger_typing</li>
+<li>typing</li>
+<li>history</li>
+<li>pins</li>
+<li>fetch_message</li>
+</ul>
+<p><code>send_help</code> is currently not implemented.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>interaction</code></strong> :&ensp;<code>discord.Interaction</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>kwargs</code></strong> :&ensp;<code>dict[str, Any]</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>command</code></strong> :&ensp;<code>Union[discord.ext.commands.Command, discord.ext.commands.Group]</code>, optional</dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>bot</code></strong> :&ensp;<code>discord.ext.commands.Bot</code>, optional</dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>interaction_response_mode</code></strong> :&ensp;<code><a title="fslash.InteractionResponseMode" href="#fslash.InteractionResponseMode">InteractionResponseMode</a></code>, default <code><a title="fslash.InteractionResponseMode.REPLY" href="#fslash.InteractionResponseMode.REPLY">InteractionResponseMode.REPLY</a></code></dt>
+<dd>Which method is used to reply to the interaction response.</dd>
+<dt><strong><code>trigger_typing_mode</code></strong> :&ensp;<code><a title="fslash.TriggerTypingMode" href="#fslash.TriggerTypingMode">TriggerTypingMode</a></code>, default <code><a title="fslash.TriggerTypingMode.DEFER_THINKING" href="#fslash.TriggerTypingMode.DEFER_THINKING">TriggerTypingMode.DEFER_THINKING</a></code></dt>
+<dd>Sets the behavior when <code><a title="fslash.Context.trigger_typing" href="#fslash.Context.trigger_typing">Context.trigger_typing()</a></code> and <code><a title="fslash.Context.typing" href="#fslash.Context.typing">Context.typing()</a></code> is executed.<br>
+You can use <code>defer</code> in the interaction response instead.<br>
+The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.reply()</a></code> can still be used afterwards.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Context(Generic[BotT]):
+    &#34;&#34;&#34;Context that is passed to the command framework commands at slash execution time instead.
+
+    Warnings
+    --------
+    This is different from the usual `discord.ext.commands.Context`.  
+    We have tried to make it as similar to the original Context as possible, but some of the commands in the command framework may behave unexpectedly.  
+    It is recommended to check just in case.
+
+    Note
+    ----
+    The following are attributes that are guaranteed to work.
+
+    * bot
+    * guild
+    * author
+    * channel
+    * cog
+    * me
+    * voice_client
+    * send
+    * reply
+    * trigger_typing
+    * typing
+    * history
+    * pins
+    * fetch_message
+
+    `send_help` is currently not implemented.
+
+    Parameters
+    ----------
+    interaction : discord.Interaction
+    kwargs : dict[str, Any]
+    command : Union[discord.ext.commands.Command, discord.ext.commands.Group], optional
+    bot : discord.ext.commands.Bot, optional
+    interaction_response_mode : InteractionResponseMode, default InteractionResponseMode.REPLY
+        Which method is used to reply to the interaction response.
+    trigger_typing_mode : TriggerTypingMode, default TriggerTypingMode.DEFER_THINKING
+        Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
+        You can use `defer` in the interaction response instead.  
+        The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
+
+    def __init__(
+        self, interaction: discord.Interaction, kwargs: dict[str, Any],
+        command: Optional[Union[commands.Command, commands.Group]] = None,
+        bot: Optional[BotT] = None,
+        interaction_response_mode: InteractionResponseMode = InteractionResponseMode.REPLY,
+        trigger_typing_mode: TriggerTypingMode = TriggerTypingMode.DEFER_THINKING
+    ):
+        self.bot, self.interaction = bot, interaction
+
+        self.message = interaction.message or self
+        self.guild = interaction.guild
+        self.author = interaction.user
+        self.channel = interaction.channel or interaction.user
+        self.fetch_message = self.channel.fetch_message # type: ignore
+        self.history = self.channel.history # type: ignore
+        self.pins = self.channel.pins # type: ignore
+        if self.guild is None:
+            self.me, self.voice_client = None, None
+        else:
+            self.me = self.guild.me
+            self.voice_client = self.guild.voice_client
+
+        self.valid = True
+        self.prefix = &#34;/&#34;
+        self.clean_prefix = &#34;/&#34;
+        self.cog = None if command is None else command.cog
+        self.command_failed = False
+        self.subcommand_passed = None
+        self.invoked_subcommand = None
+
+        self.edited_at: Optional[datetime] = None
+        self.created_at = interaction.created_at
+
+        self.command, self.app_command = command, getattr(command, &#34;__fslash__&#34;, None)
+        self.args, self.kwargs = (), kwargs
+
+        if self.command is None:
+            self.reinvoke, self.invoke = None, None
+        else:
+            self.reinvoke = self.command.reinvoke
+            self.invoke = self.command.invoke
+
+        self.view = StringView(&#34;&#34;)
+        self.invoked_parents: list[Any] = []
+        self.invoked_with = None
+
+        self.trigger_typing_mode = trigger_typing_mode
+        self.interaction_response_mode = interaction_response_mode
+        self._sended_defer = False
+
+    async def trigger_typing(self):
+        if self.trigger_typing_mode == TriggerTypingMode.TYPING:
+            await self.channel.trigger_typing() # type: ignore
+        elif self.trigger_typing_mode.name.startswith(&#34;DEFER&#34;):
+            await self.interaction.response.defer(
+                ephemeral=self.trigger_typing_mode.name.endswith(&#34;EPHEMERAL&#34;),
+                thinking=&#34;THINKING&#34; in self.trigger_typing_mode.name
+            )
+            self._sended_defer = True
+
+    async def _reply(self, content, kwargs):
+        if self._sended_defer:
+            if content is not None:
+                kwargs[&#34;content&#34;] = content
+            await self.interaction.edit_original_message(**kwargs)
+        else:
+            await self.interaction.response.send_message(
+                content, **kwargs
+            )
+
+    async def reply(self, content: Optional[str] = None, **kwargs):
+        if self.interaction_response_mode in (
+            InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
+        ):
+            await self._reply(content, kwargs)
+
+    async def send(self, content: Optional[str] = None, **kwargs):
+        if self.interaction_response_mode in (
+            InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
+        ):
+            await self._reply(content, kwargs)
+        else:
+            await self.channel.send(content, **kwargs) # type: ignore
+
+    def typing(self) -&gt; NewTyping:
+        return NewTyping(self) # type: ignore</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>typing.Generic</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="fslash.Context.reply"><code class="name flex">
+<span>async def <span class="ident">reply</span></span>(<span>self, content: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def reply(self, content: Optional[str] = None, **kwargs):
+    if self.interaction_response_mode in (
+        InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
+    ):
+        await self._reply(content, kwargs)</code></pre>
+</details>
+</dd>
+<dt id="fslash.Context.send"><code class="name flex">
+<span>async def <span class="ident">send</span></span>(<span>self, content: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send(self, content: Optional[str] = None, **kwargs):
+    if self.interaction_response_mode in (
+        InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
+    ):
+        await self._reply(content, kwargs)
+    else:
+        await self.channel.send(content, **kwargs) # type: ignore</code></pre>
+</details>
+</dd>
+<dt id="fslash.Context.trigger_typing"><code class="name flex">
+<span>async def <span class="ident">trigger_typing</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def trigger_typing(self):
+    if self.trigger_typing_mode == TriggerTypingMode.TYPING:
+        await self.channel.trigger_typing() # type: ignore
+    elif self.trigger_typing_mode.name.startswith(&#34;DEFER&#34;):
+        await self.interaction.response.defer(
+            ephemeral=self.trigger_typing_mode.name.endswith(&#34;EPHEMERAL&#34;),
+            thinking=&#34;THINKING&#34; in self.trigger_typing_mode.name
+        )
+        self._sended_defer = True</code></pre>
+</details>
+</dd>
+<dt id="fslash.Context.typing"><code class="name flex">
+<span>def <span class="ident">typing</span></span>(<span>self) ‑> <a title="fslash.context.NewTyping" href="context.html#fslash.context.NewTyping">NewTyping</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def typing(self) -&gt; NewTyping:
+    return NewTyping(self) # type: ignore</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="fslash.InteractionResponseMode"><code class="flex name class">
+<span>class <span class="ident">InteractionResponseMode</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>What method is used to return the response of the interaction.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InteractionResponseMode(Enum):
+    &#34;What method is used to return the response of the interaction.&#34;
+
+    REPLY = 0
+    SEND = 1
+    SEND_AND_REPLY = 2
+    &#34;Nothing, only ``interaction.response``.&#34;
+    NONE = 3</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fslash.InteractionResponseMode.NONE"><code class="name">var <span class="ident">NONE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.InteractionResponseMode.REPLY"><code class="name">var <span class="ident">REPLY</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.InteractionResponseMode.SEND"><code class="name">var <span class="ident">SEND</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.InteractionResponseMode.SEND_AND_REPLY"><code class="name">var <span class="ident">SEND_AND_REPLY</span></code></dt>
+<dd>
+<div class="desc"><p>Nothing, only <code>interaction.response</code>.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="fslash.TriggerTypingMode"><code class="flex name class">
+<span>class <span class="ident">TriggerTypingMode</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The type of :meth:<code><a title="fslash.context.Context.trigger_typing" href="context.html#fslash.context.Context.trigger_typing">Context.trigger_typing()</a></code> to identify its behavior.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TriggerTypingMode(Enum):
+    &#34;The type of :meth:``fslash.context.Context.trigger_typing`` to identify its behavior.&#34;
+
+    &#34;Do nothing.&#34;
+    NOTHING = 0
+    TYPING = 1
+    DEFER = 2
+    DEFER_EPHEMERAL = 3
+    DEFER_THINKING = 4
+    DEFER_THINKING_EPHEMERAL = 5</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fslash.TriggerTypingMode.DEFER"><code class="name">var <span class="ident">DEFER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.TriggerTypingMode.DEFER_EPHEMERAL"><code class="name">var <span class="ident">DEFER_EPHEMERAL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.TriggerTypingMode.DEFER_THINKING"><code class="name">var <span class="ident">DEFER_THINKING</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.TriggerTypingMode.DEFER_THINKING_EPHEMERAL"><code class="name">var <span class="ident">DEFER_THINKING_EPHEMERAL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.TriggerTypingMode.NOTHING"><code class="name">var <span class="ident">NOTHING</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fslash.TriggerTypingMode.TYPING"><code class="name">var <span class="ident">TYPING</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul>
+<li><a href="#discord-ext-fslash">discord-ext-fslash</a><ul>
+<li><a href="#features">Features</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#example">Example</a><ul>
+<li><a href="#normal">Normal</a></li>
+<li><a href="#split-commands-by-categories">Split Commands by Categories</a></li>
+</ul>
+</li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="fslash.context" href="context.html">fslash.context</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="fslash.exceptions" href="#fslash.exceptions">exceptions</a></code></li>
+<li><code><a title="fslash.groups" href="#fslash.groups">groups</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="fslash.adjustment_command_name" href="#fslash.adjustment_command_name">adjustment_command_name</a></code></li>
+<li><code><a title="fslash.extend_force_slash" href="#fslash.extend_force_slash">extend_force_slash</a></code></li>
+<li><code><a title="fslash.is_fslash" href="#fslash.is_fslash">is_fslash</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fslash.AdjustmentNameMode" href="#fslash.AdjustmentNameMode">AdjustmentNameMode</a></code></h4>
+<ul class="">
+<li><code><a title="fslash.AdjustmentNameMode.KEBAB_CASE" href="#fslash.AdjustmentNameMode.KEBAB_CASE">KEBAB_CASE</a></code></li>
+<li><code><a title="fslash.AdjustmentNameMode.SNAKE_CASE" href="#fslash.AdjustmentNameMode.SNAKE_CASE">SNAKE_CASE</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fslash.Context" href="#fslash.Context">Context</a></code></h4>
+<ul class="">
+<li><code><a title="fslash.Context.reply" href="#fslash.Context.reply">reply</a></code></li>
+<li><code><a title="fslash.Context.send" href="#fslash.Context.send">send</a></code></li>
+<li><code><a title="fslash.Context.trigger_typing" href="#fslash.Context.trigger_typing">trigger_typing</a></code></li>
+<li><code><a title="fslash.Context.typing" href="#fslash.Context.typing">typing</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fslash.InteractionResponseMode" href="#fslash.InteractionResponseMode">InteractionResponseMode</a></code></h4>
+<ul class="">
+<li><code><a title="fslash.InteractionResponseMode.NONE" href="#fslash.InteractionResponseMode.NONE">NONE</a></code></li>
+<li><code><a title="fslash.InteractionResponseMode.REPLY" href="#fslash.InteractionResponseMode.REPLY">REPLY</a></code></li>
+<li><code><a title="fslash.InteractionResponseMode.SEND" href="#fslash.InteractionResponseMode.SEND">SEND</a></code></li>
+<li><code><a title="fslash.InteractionResponseMode.SEND_AND_REPLY" href="#fslash.InteractionResponseMode.SEND_AND_REPLY">SEND_AND_REPLY</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fslash.TriggerTypingMode" href="#fslash.TriggerTypingMode">TriggerTypingMode</a></code></h4>
+<ul class="">
+<li><code><a title="fslash.TriggerTypingMode.DEFER" href="#fslash.TriggerTypingMode.DEFER">DEFER</a></code></li>
+<li><code><a title="fslash.TriggerTypingMode.DEFER_EPHEMERAL" href="#fslash.TriggerTypingMode.DEFER_EPHEMERAL">DEFER_EPHEMERAL</a></code></li>
+<li><code><a title="fslash.TriggerTypingMode.DEFER_THINKING" href="#fslash.TriggerTypingMode.DEFER_THINKING">DEFER_THINKING</a></code></li>
+<li><code><a title="fslash.TriggerTypingMode.DEFER_THINKING_EPHEMERAL" href="#fslash.TriggerTypingMode.DEFER_THINKING_EPHEMERAL">DEFER_THINKING_EPHEMERAL</a></code></li>
+<li><code><a title="fslash.TriggerTypingMode.NOTHING" href="#fslash.TriggerTypingMode.NOTHING">NOTHING</a></code></li>
+<li><code><a title="fslash.TriggerTypingMode.TYPING" href="#fslash.TriggerTypingMode.TYPING">TYPING</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
