@@ -3,8 +3,6 @@
 from typing import TypeVar
 from enum import Enum
 
-from discord.ext.commands.bot import BotBase
-
 
 class AdjustmentNameMode(Enum):
     "It is how lib arrange the name."
@@ -35,4 +33,4 @@ class InteractionResponseMode(Enum):
     NONE = 3
 
 
-BotT = TypeVar("BotT", bound=BotBase)
+BotT = TypeVar("BotT")
