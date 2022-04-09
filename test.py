@@ -104,7 +104,8 @@ class NewConverter(commands.Converter):
     discord.app_commands.Choice(name="test", value=2)
 ])
 async def test(ctx, a: discord.app_commands.Choice[int], b: int, c: bool, d: float, e: discord.Member, f: NewConverter):
-    await ctx.reply(f'Ok: {", ".join(map(str, (a, b, c, d, e, f)))}')
+    print(a.name)
+    await ctx.reply(f'Ok: {", ".join(map(str, (a.value, b, c, d, e, f)))}')
 
 
 # Many nested commands

@@ -22,7 +22,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "tasuren"
 
 
@@ -131,10 +131,6 @@ async def _run_command(bot, interaction, command, content, **kwargs) -> None:
     if content is not None:
         ctx.view = type(ctx.view)(content)
         setattr(ctx, "__fslash_do_original_pa__", True)
-    # Choiceは`value`の値に置き換える。
-    for key, value in list(kwargs.items()):
-        if isinstance(value, app_commands.Choice):
-            kwargs[key] = value.value
     try:
         await command.invoke(ctx) # type: ignore
     except Exception as e:
@@ -153,6 +149,7 @@ def _apply_describe(command):
 _original_run_converter = commands.core.run_converters # type: ignore
 async def _new_run_converters(ctx, converter, argument, param):
     origin = getattr(converter, "__origin__", None)
+    is_choice = False
     if origin is app_commands.Choice and hasattr(
         ctx.command.callback, "__fslash_param_choices__"
     ):
@@ -160,10 +157,14 @@ async def _new_run_converters(ctx, converter, argument, param):
         if choices := ctx.command.callback.__fslash_param_choices__.get(param.name):
             converter = Literal[0]
             setattr(converter, "__args__", tuple(choice.value for choice in choices))
+            is_choice = True
     elif isinstance(converter, app_commands.transformers._TransformMetadata):
         # TransformはConverterに置き換える。
         converter = getattr(converter.metadata, "__fslash_original_annotation__")
-    return await _original_run_converter(ctx, converter, argument, param)
+    data = await _original_run_converter(ctx, converter, argument, param)
+    if is_choice:
+        data = discord.utils.get(choices, value=data)
+    return data
 commands.core.run_converters = _new_run_converters # type: ignore
 
 
@@ -257,8 +258,8 @@ def extend_force_slash(
     ```
 
     You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
-    Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.
-    And the value of the argument at runtime will be the value of `Choice.value`, not `Choice`."""
+    Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.  
+    But the value of the argument at runtime is the value of `Choice`."""
     global _bot, groups, exceptions, _context_kwargs
     _context_kwargs.update(context_kwargs or {})
     _bot = bot
