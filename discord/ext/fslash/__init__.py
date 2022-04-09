@@ -22,7 +22,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "tasuren"
 
 
@@ -156,14 +156,14 @@ async def _new_run_converters(ctx, converter, argument, param):
         # ChoiceをLiteralに交換する。
         if choices := ctx.command.callback.__fslash_param_choices__.get(param.name):
             converter = Literal[0]
-            setattr(converter, "__args__", tuple(choice.value for choice in choices))
+            setattr(converter, "__args__", tuple(choice.name for choice in choices))
             is_choice = True
     elif isinstance(converter, app_commands.transformers._TransformMetadata):
         # TransformはConverterに置き換える。
         converter = getattr(converter.metadata, "__fslash_original_annotation__")
     data = await _original_run_converter(ctx, converter, argument, param)
     if is_choice:
-        data = discord.utils.get(choices, value=data)
+        data = discord.utils.get(choices, name=data)
     return data
 commands.core.run_converters = _new_run_converters # type: ignore
 
