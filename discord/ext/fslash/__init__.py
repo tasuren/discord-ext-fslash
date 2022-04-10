@@ -23,7 +23,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 __author__ = "tasuren"
 
 
@@ -73,6 +73,9 @@ def _new_evaluate_annotation(*args, **kwargs):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
         class ConverterTransformer(app_commands.Transformer):
+
+            __fslash_original_annotation__ = annotation
+
             @classmethod
             async def transform(cls, _, value):
                 return await converter(value) if iscoroutinefunction(converter) else converter(value)
