@@ -120,7 +120,7 @@ __all__ = (
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;, &#34;TriggerTypingMode&#34;,
     &#34;InteractionResponseMode&#34;
 )
-__version__ = &#34;0.1.5&#34;
+__version__ = &#34;0.1.6&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -477,7 +477,6 @@ def extend_force_slash(
                 await _run_command(bot, interaction, command, content)
             setattr(command, &#34;__fslash_max_parent__&#34;, True)
             if isinstance(e, AssertionError):
-                print(1)
                 setattr(parent, &#34;__fslash_max_parent__&#34;, True)
 
         _replace_atp(False, None, replace_invalid_annotation_to_str)
@@ -847,7 +846,6 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
                 await _run_command(bot, interaction, command, content)
             setattr(command, &#34;__fslash_max_parent__&#34;, True)
             if isinstance(e, AssertionError):
-                print(1)
                 setattr(parent, &#34;__fslash_max_parent__&#34;, True)
 
         _replace_atp(False, None, replace_invalid_annotation_to_str)
