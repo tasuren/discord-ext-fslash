@@ -77,6 +77,8 @@ class Context(Generic[BotT]):
     * history
     * pins
     * fetch_message
+    * add_reaction (Do nothing)
+    * remove_reaction (Do nothing)
 
     `send_help` is currently not implemented.
 
@@ -133,15 +135,19 @@ class Context(Generic[BotT]):
             self.reinvoke, self.invoke = None, None
         else:
             self.reinvoke = self.command.reinvoke
-            self.invoke = self.command.invoke
 
         self.view = StringView(&#34;&#34;)
         self.invoked_parents: list[Any] = []
         self.invoked_with = None
+        self.edit = self._reply
 
         self.trigger_typing_mode = trigger_typing_mode
         self.interaction_response_mode = interaction_response_mode
         self._sended_defer = False
+        self._emojis = &#34;&#34;
+
+    async def invoke(self, command, *args, **kwargs):
+        return await command(self, *args, **kwargs)
 
     async def trigger_typing(self):
         if self.trigger_typing_mode == TriggerTypingMode.TYPING:
@@ -158,8 +164,9 @@ class Context(Generic[BotT]):
             if content is not None:
                 kwargs[&#34;content&#34;] = content
             await self.interaction.edit_original_message(**kwargs)
+            return self
         else:
-            await self.interaction.response.send_message(
+            return await self.interaction.response.send_message(
                 content, **kwargs
             )
 
@@ -167,18 +174,23 @@ class Context(Generic[BotT]):
         if self.interaction_response_mode in (
             InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
         ):
-            await self._reply(content, kwargs)
+            return await self._reply(content, kwargs)
 
     async def send(self, content: Optional[str] = None, **kwargs):
         if self.interaction_response_mode in (
             InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
         ):
             await self._reply(content, kwargs)
+            return self
         else:
-            await self.channel.send(content, **kwargs) # type: ignore
+            return await self.channel.send(content, **kwargs) # type: ignore
 
     def typing(self) -&gt; NewTyping:
         return NewTyping(self) # type: ignore
+
+    async def add_reaction(self, _): ...
+
+    async def remove_reaction(self, _, __): ...
 
 
 def is_fslash(context: Union[Context, commands.Context]) -&gt; bool:
@@ -262,6 +274,8 @@ It is recommended to check just in case.</p>
 <li>history</li>
 <li>pins</li>
 <li>fetch_message</li>
+<li>add_reaction (Do nothing)</li>
+<li>remove_reaction (Do nothing)</li>
 </ul>
 <p><code>send_help</code> is currently not implemented.</p>
 <h2 id="parameters">Parameters</h2>
@@ -312,6 +326,8 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
     * history
     * pins
     * fetch_message
+    * add_reaction (Do nothing)
+    * remove_reaction (Do nothing)
 
     `send_help` is currently not implemented.
 
@@ -368,15 +384,19 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
             self.reinvoke, self.invoke = None, None
         else:
             self.reinvoke = self.command.reinvoke
-            self.invoke = self.command.invoke
 
         self.view = StringView(&#34;&#34;)
         self.invoked_parents: list[Any] = []
         self.invoked_with = None
+        self.edit = self._reply
 
         self.trigger_typing_mode = trigger_typing_mode
         self.interaction_response_mode = interaction_response_mode
         self._sended_defer = False
+        self._emojis = &#34;&#34;
+
+    async def invoke(self, command, *args, **kwargs):
+        return await command(self, *args, **kwargs)
 
     async def trigger_typing(self):
         if self.trigger_typing_mode == TriggerTypingMode.TYPING:
@@ -393,8 +413,9 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
             if content is not None:
                 kwargs[&#34;content&#34;] = content
             await self.interaction.edit_original_message(**kwargs)
+            return self
         else:
-            await self.interaction.response.send_message(
+            return await self.interaction.response.send_message(
                 content, **kwargs
             )
 
@@ -402,18 +423,23 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
         if self.interaction_response_mode in (
             InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
         ):
-            await self._reply(content, kwargs)
+            return await self._reply(content, kwargs)
 
     async def send(self, content: Optional[str] = None, **kwargs):
         if self.interaction_response_mode in (
             InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
         ):
             await self._reply(content, kwargs)
+            return self
         else:
-            await self.channel.send(content, **kwargs) # type: ignore
+            return await self.channel.send(content, **kwargs) # type: ignore
 
     def typing(self) -&gt; NewTyping:
-        return NewTyping(self) # type: ignore</code></pre>
+        return NewTyping(self) # type: ignore
+
+    async def add_reaction(self, _): ...
+
+    async def remove_reaction(self, _, __): ...</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -421,6 +447,43 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="fslash.context.Context.add_reaction"><code class="name flex">
+<span>async def <span class="ident">add_reaction</span></span>(<span>self, _)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def add_reaction(self, _): ...</code></pre>
+</details>
+</dd>
+<dt id="fslash.context.Context.invoke"><code class="name flex">
+<span>async def <span class="ident">invoke</span></span>(<span>self, command, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def invoke(self, command, *args, **kwargs):
+    return await command(self, *args, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="fslash.context.Context.remove_reaction"><code class="name flex">
+<span>async def <span class="ident">remove_reaction</span></span>(<span>self, _, __)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def remove_reaction(self, _, __): ...</code></pre>
+</details>
+</dd>
 <dt id="fslash.context.Context.reply"><code class="name flex">
 <span>async def <span class="ident">reply</span></span>(<span>self, content: Optional[str] = None, **kwargs)</span>
 </code></dt>
@@ -434,7 +497,7 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
     if self.interaction_response_mode in (
         InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
     ):
-        await self._reply(content, kwargs)</code></pre>
+        return await self._reply(content, kwargs)</code></pre>
 </details>
 </dd>
 <dt id="fslash.context.Context.send"><code class="name flex">
@@ -451,8 +514,9 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
         InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
     ):
         await self._reply(content, kwargs)
+        return self
     else:
-        await self.channel.send(content, **kwargs) # type: ignore</code></pre>
+        return await self.channel.send(content, **kwargs) # type: ignore</code></pre>
 </details>
 </dd>
 <dt id="fslash.context.Context.trigger_typing"><code class="name flex">
@@ -535,7 +599,10 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
 <ul>
 <li>
 <h4><code><a title="fslash.context.Context" href="#fslash.context.Context">Context</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="fslash.context.Context.add_reaction" href="#fslash.context.Context.add_reaction">add_reaction</a></code></li>
+<li><code><a title="fslash.context.Context.invoke" href="#fslash.context.Context.invoke">invoke</a></code></li>
+<li><code><a title="fslash.context.Context.remove_reaction" href="#fslash.context.Context.remove_reaction">remove_reaction</a></code></li>
 <li><code><a title="fslash.context.Context.reply" href="#fslash.context.Context.reply">reply</a></code></li>
 <li><code><a title="fslash.context.Context.send" href="#fslash.context.Context.send">send</a></code></li>
 <li><code><a title="fslash.context.Context.trigger_typing" href="#fslash.context.Context.trigger_typing">trigger_typing</a></code></li>
