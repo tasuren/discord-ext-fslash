@@ -120,7 +120,7 @@ __all__ = (
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;, &#34;TriggerTypingMode&#34;,
     &#34;InteractionResponseMode&#34;
 )
-__version__ = &#34;0.1.6&#34;
+__version__ = &#34;0.1.7&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -170,6 +170,9 @@ def _new_evaluate_annotation(*args, **kwargs):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
         class ConverterTransformer(app_commands.Transformer):
+
+            __fslash_original_annotation__ = annotation
+
             @classmethod
             async def transform(cls, _, value):
                 return await converter(value) if iscoroutinefunction(converter) else converter(value)
