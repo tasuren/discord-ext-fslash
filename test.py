@@ -3,7 +3,7 @@
 from asyncio import run, sleep
 
 from discord.ext import commands
-from discord.ext.fslash import extend_force_slash, groups
+from discord.ext.fslash import extend_force_slash, groups, InteractionResponseMode
 import discord
 
 
@@ -14,6 +14,7 @@ GUILD = discord.Object(777430548951728149)
 class MyBot(commands.Bot):
     async def setup_hook(self):
         await self.add_cog(TestCog(self))
+        await bot.load_extension("jishaku")
 
     async def on_ready(self):
         print("sync")
@@ -28,7 +29,9 @@ bot = extend_force_slash(MyBot(command_prefix="t!", intents=intents), first_grou
     discord.app_commands.Group(
         name="category", description="Test category", guild_ids=[GUILD_ID]
     )
-])
+], replace_invalid_annotation_to_str=True, context_kwargs=dict(
+    interaction_response_mode=InteractionResponseMode.SEND_AND_REPLY
+))
 
 
 class TestCog(commands.Cog):

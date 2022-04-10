@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Callable, Iterable, Literal, Union, Optional, Any, DefaultDict
 
+from inspect import isfunction, iscoroutinefunction
 from collections import defaultdict
 from string import octdigits
 from re import sub
@@ -56,7 +57,7 @@ def _new_evaluate_annotation(*args, **kwargs):
     annotation = _original_evaluate_annotation(*args, **kwargs)
     if commands.Converter in getattr(annotation, "__mro__", ()):
         converter = annotation()
-        # Converterを実行するTransformerです。
+        # Converterを実行するTransformerを作る。
         class ConverterTransformer(app_commands.Transformer):
 
             # コマンドフレームワークで実行された際には、元のコンバーターを実行できるように元を取って置く。
@@ -67,6 +68,14 @@ def _new_evaluate_annotation(*args, **kwargs):
                 return await converter.convert(
                     Context(interaction, {}, None, _bot, **_context_kwargs), value
                 )
+        annotation = app_commands.Transform[None, ConverterTransformer]
+    if isfunction(annotation):
+        # 関数のコンバーターを実行するTransformerを作る。
+        converter = annotation
+        class ConverterTransformer(app_commands.Transformer):
+            @classmethod
+            async def transform(cls, _, value):
+                return await converter(value) if iscoroutinefunction(converter) else converter(value)
         annotation = app_commands.Transform[None, ConverterTransformer]
     return annotation
 discord.utils.evaluate_annotation = _new_evaluate_annotation
@@ -85,11 +94,16 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
                 except Exception as e:
                     # 失敗したなら`str`のアノテーションにする。
                     if failed_annotations is not None:
-                        failed_annotations[annotation] = e
+                        failed_annotations[str(annotation)] = e
+                    if parameter.kind in (
+                        parameter.POSITIONAL_ONLY, parameter.VAR_KEYWORD, parameter.VAR_POSITIONAL
+                    ):
+                        parameter = parameter.replace(kind=parameter.KEYWORD_ONLY)
                     return _original_atp(str, parameter)
             else:
                 return _original_atp(annotation, parameter)
         app_commands.transformers.annotation_to_parameter = new_atp
+        app_commands.commands.annotation_to_parameter = new_atp
 
         def new_signature(*args, **kwargs):
             signature = _original_signature(*args, **kwargs)
@@ -106,6 +120,7 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
         inspect.signature = new_signature
     else:
         app_commands.transformers.annotation_to_parameter = _original_atp
+        app_commands.commands.annotation_to_parameter = _original_atp
         inspect.signature = _original_signature
 
 
@@ -311,7 +326,9 @@ def extend_force_slash(
             assert fsparent is None, f"A group command that has not yet been registered as a parent command in `{command}` has been specified."
         # もしコマンドフレームワークのグループコマンドのサブコマンドの場合は、親コマンドのスラッシュのグループコマンドを、スラッシュでも親コマンドとする。
         if parent is None and command.parent is not None:
-            parent = getattr(command.parent, "__fslash__")
+            parent = getattr(command.parent, "__fslash__", None)
+            if parent is None:
+                return _replace_atp(False, None, replace_invalid_annotation_to_str)
         # choiceのデータをコマンドフレームワークのコマンド実行時にLiteralに交換するので取って置く。
         if hasattr(command.callback, "__discord_app_commands_param_choices__"):
             setattr(
@@ -323,43 +340,48 @@ def extend_force_slash(
         # スラッシュコマンドを作る。
         name = command.name if adjustment_name is None \
             else adjustment_command_name(command.name, adjustment_name)
-        if isinstance(command, commands.Group):
-            try:
+        if getattr(parent, "__fslash_max_parent__", False):
+            return _replace_atp(False, None, replace_invalid_annotation_to_str)
+        try:
+            assert parent is None or len(parent._children) < 24
+            if isinstance(command, commands.Group):
                 groups.append(app_commands.Group(
                     name=name,
                     description=command.description or default_description,
                     parent=parent, guild_ids=_get(command, "guild_ids", None)
                 ))
-            except ValueError:
-                # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
-                assert isinstance(parent, app_commands.Group)
-                @parent.command(
-                    name=name, description=command.description or default_description
-                )
-                async def alternative_for_nested(
-                    interaction: discord.Interaction, content: str
-                ):
-                    await _run_command(bot, interaction, command, content)
-                setattr(command, "__fslash_max_parent__", True)
-            setattr(command, "__fslash__", groups[-1])
-        else:
-            _apply_describe(command)
-            # スラッシュコマンドを作る。
-            app_command: app_commands.Command = (bot.tree.command if parent is None else parent.command)(
-                name=name, description=command.description or default_description,
-                **(dict(
-                    guild=_get(command, "guild", discord.utils.MISSING), guilds=_get(
-                        command, "guilds", discord.utils.MISSING
-                    )
-                ) if parent is None else {})
-            )(command.callback) # type: ignore
-            setattr(command, "__fslash__", app_command)
+                setattr(command, "__fslash__", groups[-1])
+            else:
+                _apply_describe(command)
+                # スラッシュコマンドを作る。
+                app_command: app_commands.Command = (bot.tree.command if parent is None else parent.command)(
+                    name=name, description=command.description or default_description,
+                    **(dict(
+                        guild=_get(command, "guild", discord.utils.MISSING), guilds=_get(
+                            command, "guilds", discord.utils.MISSING
+                        )
+                    ) if parent is None else {})
+                )(command.callback) # type: ignore
+                setattr(command, "__fslash__", app_command)
 
-            # 実行される関数を用意する。
-            async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
-                await _run_command(bot, interaction, command, None, **kwargs)
-            setattr(app_command, "_callback", inner_function)
-
+                # 実行される関数を用意する。
+                async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
+                    await _run_command(bot, interaction, command, None, **kwargs)
+                setattr(app_command, "_callback", inner_function)
+        except (ValueError, AssertionError) as e:
+            # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
+            assert isinstance(parent, app_commands.Group)
+            @parent.command(
+                name=name, description=command.description or default_description
+            )
+            async def alternative_for_nested(
+                interaction: discord.Interaction, content: str
+            ):
+                await _run_command(bot, interaction, command, content)
+            setattr(command, "__fslash_max_parent__", True)
+            if isinstance(e, AssertionError):
+                print(1)
+                setattr(parent, "__fslash_max_parent__", True)
 
         _replace_atp(False, None, replace_invalid_annotation_to_str)
     setattr(commands.Command, "__init__", command_new_init)

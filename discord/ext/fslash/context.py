@@ -49,6 +49,8 @@ class Context(Generic[BotT]):
     * history
     * pins
     * fetch_message
+    * add_reaction (Do nothing)
+    * remove_reaction (Do nothing)
 
     `send_help` is currently not implemented.
 
@@ -105,15 +107,19 @@ class Context(Generic[BotT]):
             self.reinvoke, self.invoke = None, None
         else:
             self.reinvoke = self.command.reinvoke
-            self.invoke = self.command.invoke
 
         self.view = StringView("")
         self.invoked_parents: list[Any] = []
         self.invoked_with = None
+        self.edit = self._reply
 
         self.trigger_typing_mode = trigger_typing_mode
         self.interaction_response_mode = interaction_response_mode
         self._sended_defer = False
+        self._emojis = ""
+
+    async def invoke(self, command, *args, **kwargs):
+        return await command(self, *args, **kwargs)
 
     async def trigger_typing(self):
         if self.trigger_typing_mode == TriggerTypingMode.TYPING:
@@ -130,8 +136,9 @@ class Context(Generic[BotT]):
             if content is not None:
                 kwargs["content"] = content
             await self.interaction.edit_original_message(**kwargs)
+            return self
         else:
-            await self.interaction.response.send_message(
+            return await self.interaction.response.send_message(
                 content, **kwargs
             )
 
@@ -139,18 +146,23 @@ class Context(Generic[BotT]):
         if self.interaction_response_mode in (
             InteractionResponseMode.REPLY, InteractionResponseMode.SEND_AND_REPLY
         ):
-            await self._reply(content, kwargs)
+            return await self._reply(content, kwargs)
 
     async def send(self, content: Optional[str] = None, **kwargs):
         if self.interaction_response_mode in (
             InteractionResponseMode.SEND, InteractionResponseMode.SEND_AND_REPLY
         ):
             await self._reply(content, kwargs)
+            return self
         else:
-            await self.channel.send(content, **kwargs) # type: ignore
+            return await self.channel.send(content, **kwargs) # type: ignore
 
     def typing(self) -> NewTyping:
         return NewTyping(self) # type: ignore
+
+    async def add_reaction(self, _): ...
+
+    async def remove_reaction(self, _, __): ...
 
 
 def is_fslash(context: Union[Context, commands.Context]) -> bool:
