@@ -23,7 +23,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "tasuren"
 
 
