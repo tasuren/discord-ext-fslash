@@ -23,7 +23,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 __author__ = "tasuren"
 
 
@@ -380,7 +380,6 @@ def extend_force_slash(
                 await _run_command(bot, interaction, command, content)
             setattr(command, "__fslash_max_parent__", True)
             if isinstance(e, AssertionError):
-                print(1)
                 setattr(parent, "__fslash_max_parent__", True)
 
         _replace_atp(False, None, replace_invalid_annotation_to_str)
