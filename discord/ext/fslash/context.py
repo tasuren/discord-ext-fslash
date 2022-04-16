@@ -174,5 +174,5 @@ def is_fslash(context: Union[Context, commands.Context]) -> bool:
 
     Notes
     -----
-    All it does is check if the attribute `interaction` is in the `Context`."""
-    return hasattr(context, "interaction")
+    It just run `isinstance(context, fslash.Context)`."""
+    return isinstance(context, Context)
