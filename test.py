@@ -157,6 +157,10 @@ async def ban(ctx, *, member: discord.Member):
     await member.ban()
     await ctx.reply("pong")
 
+@bot.command(guild=GUILD)
+async def testaiueo(ctx):
+    await ctx.reply(1 + "a")
+
 @bot.listen()
 async def on_command_error(ctx, error):
     print("Error:", ctx.args, ctx.kwargs, error)
@@ -165,6 +169,10 @@ async def on_command_error(ctx, error):
 @bot.listen()
 async def on_message(message):
     print(message.author, message.content)
+
+@bot.listen()
+async def on_command_completion(ctx):
+    print(ctx)
 
 
 with open("token.secret", "r") as f:

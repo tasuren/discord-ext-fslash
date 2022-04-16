@@ -23,7 +23,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 __author__ = "tasuren"
 
 
@@ -151,8 +151,10 @@ async def _run_command(bot, interaction, command, content, **kwargs) -> None:
         setattr(ctx, "__fslash_do_original_pa__", True)
     try:
         await command.invoke(ctx) # type: ignore
-    except Exception as e:
-        bot.dispatch("command_error", ctx, e)
+    except commands.CommandError as e:
+        await command.dispatch_error(ctx, e)
+    else:
+        bot.dispatch("command_completion", ctx)
 
 
 def _apply_describe(command):
