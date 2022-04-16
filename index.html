@@ -120,7 +120,7 @@ __all__ = (
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;, &#34;TriggerTypingMode&#34;,
     &#34;InteractionResponseMode&#34;
 )
-__version__ = &#34;0.1.7&#34;
+__version__ = &#34;0.1.8&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -897,7 +897,7 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
 <dd>&nbsp;</dd>
 </dl>
 <h2 id="notes">Notes</h2>
-<p>All it does is check if the attribute <code>interaction</code> is in the <code><a title="fslash.Context" href="#fslash.Context">Context</a></code>.</p></div>
+<p>It just run <code>isinstance(<a title="fslash.context" href="context.html">fslash.context</a>, <a title="fslash.Context" href="#fslash.Context">Context</a>)</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -911,8 +911,8 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
 
     Notes
     -----
-    All it does is check if the attribute `interaction` is in the `Context`.&#34;&#34;&#34;
-    return hasattr(context, &#34;interaction&#34;)</code></pre>
+    It just run `isinstance(context, fslash.Context)`.&#34;&#34;&#34;
+    return isinstance(context, Context)</code></pre>
 </details>
 </dd>
 </dl>
