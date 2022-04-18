@@ -9,9 +9,11 @@ Therefore, if there is a destructive update to discord.py, this library will not
 If you want to install version 2.0a now, you can do so by running: `pip3 install -U git+https://github.com/Rapptz/discord.py`.
 
 ## Features
-It will support both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.
-Also, the converter will automatically replace to the `Transformer` of slash version.
-Even if you have too many commands and reach the maximum number of can be registered slash commands, we have a way to deal with it. (An example is below)
+It will support both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.  
+The converter will automatically replace to the `Transformer` of slash version.  
+It can also automatically convert invalid annotations to `str` and register overnested group commands by accepting subcommands from command arguments.  
+Even if you have too many commands and reach the maximum number of can be registered slash commands, we have a way to deal with it. (An example is below)  
+If you are planning to create a bot, we recommend using HybridCommand, which comes standard in discord.py.
 
 ## Installation
 `pip install discord-ext-fslash`
