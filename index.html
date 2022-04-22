@@ -122,7 +122,7 @@ __all__ = (
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;, &#34;TriggerTypingMode&#34;,
     &#34;InteractionResponseMode&#34;
 )
-__version__ = &#34;0.1.9&#34;
+__version__ = &#34;0.1.10&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -242,7 +242,7 @@ async def _new_parse_arguments(self, ctx):
 setattr(commands.Command, &#34;_parse_arguments&#34;, _new_parse_arguments)
 
 
-async def _run_command(bot, interaction, command, content, **kwargs) -&gt; None:
+async def _run_command(bot, interaction, command, content, kwargs={}) -&gt; None:
     # Run command
     ctx = Context(interaction, kwargs, command, bot, **_context_kwargs)
     if content is not None:
@@ -470,7 +470,7 @@ def extend_force_slash(
 
                 # 実行される関数を用意する。
                 async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
-                    await _run_command(bot, interaction, command, None, **kwargs)
+                    await _run_command(bot, interaction, command, None, kwargs)
                 setattr(app_command, &#34;_callback&#34;, inner_function)
         except (ValueError, AssertionError) as e:
             # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
@@ -839,7 +839,7 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
 
                 # 実行される関数を用意する。
                 async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
-                    await _run_command(bot, interaction, command, None, **kwargs)
+                    await _run_command(bot, interaction, command, None, kwargs)
                 setattr(app_command, &#34;_callback&#34;, inner_function)
         except (ValueError, AssertionError) as e:
             # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
