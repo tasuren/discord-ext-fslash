@@ -23,6 +23,12 @@ class MyBot(commands.Bot):
         print("I'm ready")
 
 
+class ConverterTest(commands.Converter):
+    async def convert(self, ctx, arg):
+        print(ctx, arg)
+        return arg
+
+
 intents = discord.Intents.default()
 intents.message_content = True
 bot = extend_force_slash(MyBot(command_prefix="t!", intents=intents), first_groups=[
@@ -77,6 +83,11 @@ async def sleep_(ctx):
 
 @bot.command(guild=GUILD, description="test")
 async def normal(ctx):
+    await ctx.reply("Ok")
+
+
+@bot.command(guild=GUILD)
+async def converter_test(ctx, test: ConverterTest):
     await ctx.reply("Ok")
 
 

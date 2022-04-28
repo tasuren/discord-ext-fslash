@@ -23,7 +23,7 @@ __all__ = (
     "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
     "InteractionResponseMode"
 )
-__version__ = "0.1.9"
+__version__ = "0.1.11"
 __author__ = "tasuren"
 
 
@@ -55,31 +55,26 @@ _context_kwargs = {}
 _original_evaluate_annotation = discord.utils.evaluate_annotation
 def _new_evaluate_annotation(*args, **kwargs):
     annotation = _original_evaluate_annotation(*args, **kwargs)
+    transform = None
     if commands.Converter in getattr(annotation, "__mro__", ()):
         converter = annotation()
-        # Converterを実行するTransformerを作る。
-        class ConverterTransformer(app_commands.Transformer):
-
-            # コマンドフレームワークで実行された際には、元のコンバーターを実行できるように元を取って置く。
-            __fslash_original_annotation__ = annotation
-
-            @classmethod
-            async def transform(cls, interaction, value: str):
-                return await converter.convert(
-                    Context(interaction, {}, None, _bot, **_context_kwargs), value
-                )
-        annotation = app_commands.Transform[None, ConverterTransformer]
+        async def transform(cls, interaction, value: str):
+            return await converter.convert(
+                Context(interaction, {}, None, _bot, **_context_kwargs), value
+            )
     if isfunction(annotation):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
-        class ConverterTransformer(app_commands.Transformer):
-
-            __fslash_original_annotation__ = annotation
-
-            @classmethod
-            async def transform(cls, _, value):
-                return await converter(value) if iscoroutinefunction(converter) else converter(value)
-        annotation = app_commands.Transform[None, ConverterTransformer]
+        async def transform(cls, _, value):
+            return await converter(value) if iscoroutinefunction(converter) else converter(value)
+    if transform is not None:
+        annotation = app_commands.Transform[None, type(
+            "ConverterTransformer", (app_commands.Transformer,),
+            {
+                "__fslash_original_annotation__": annotation,
+                "transform": classmethod(transform)
+            }
+        )]
     return annotation
 discord.utils.evaluate_annotation = _new_evaluate_annotation
 
@@ -178,9 +173,9 @@ async def _new_run_converters(ctx, converter, argument, param):
             converter = Literal[0]
             setattr(converter, "__args__", tuple(choice.name for choice in choices))
             is_choice = True
-    elif isinstance(converter, app_commands.transformers._TransformMetadata):
+    elif hasattr(converter, "__fslash_original_annotation__"):
         # TransformはConverterに置き換える。
-        converter = getattr(converter.metadata, "__fslash_original_annotation__")
+        converter = getattr(converter, "__fslash_original_annotation__")
     data = await _original_run_converter(ctx, converter, argument, param)
     if is_choice:
         data = discord.utils.get(choices, name=data)
