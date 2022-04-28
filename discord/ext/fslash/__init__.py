@@ -138,7 +138,7 @@ async def _new_parse_arguments(self, ctx):
 setattr(commands.Command, "_parse_arguments", _new_parse_arguments)
 
 
-async def _run_command(bot, interaction, command, content, **kwargs) -> None:
+async def _run_command(bot, interaction, command, content, kwargs={}) -> None:
     # Run command
     ctx = Context(interaction, kwargs, command, bot, **_context_kwargs)
     if content is not None:
@@ -366,7 +366,7 @@ def extend_force_slash(
 
                 # 実行される関数を用意する。
                 async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
-                    await _run_command(bot, interaction, command, None, **kwargs)
+                    await _run_command(bot, interaction, command, None, kwargs)
                 setattr(app_command, "_callback", inner_function)
         except (ValueError, AssertionError) as e:
             # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
