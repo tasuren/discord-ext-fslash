@@ -60,9 +60,9 @@ class Context(Generic[BotT]):
     kwargs : dict[str, Any]
     command : Union[discord.ext.commands.Command, discord.ext.commands.Group], optional
     bot : discord.ext.commands.Bot, optional
-    interaction_response_mode : InteractionResponseMode, default InteractionResponseMode.REPLY
+    interaction_response_mode : types_.InteractionResponseMode, default types._InteractionResponseMode.REPLY
         Which method is used to reply to the interaction response.
-    trigger_typing_mode : TriggerTypingMode, default TriggerTypingMode.DEFER_THINKING
+    trigger_typing_mode : types_.TriggerTypingMode, default types_.TriggerTypingMode.DEFER_THINKING
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards."""

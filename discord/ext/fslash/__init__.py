@@ -231,7 +231,7 @@ def extend_force_slash(
     check : Callable[[Union[commands.Command, commands.Group]], bool], optional
         Function used to check if a command should be added.  
         This is useful if you do not want some commands to be registered as slashes.
-    adjustment_name : AdjustmentNameMode, optional
+    adjustment_name : types_.AdjustmentNameMode, optional
         Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.  
         If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.
     replace_invalid_annotation_to_str : bool, default False
@@ -245,7 +245,7 @@ def extend_force_slash(
         This is a list of group commands to be registered first.  
         If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
         How to do it is described in the Notes of this function.
-    context_mode : ContextMode, default ContextMode.UNOFFICIAL
+    context_mode : types_.ContextMode, default types_.ContextMode.UNOFFICIAL
         How to make `ctx`.
     context_kwargs : dict, optional
         Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
