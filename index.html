@@ -330,7 +330,7 @@ def extend_force_slash(
     check : Callable[[Union[commands.Command, commands.Group]], bool], optional
         Function used to check if a command should be added.  
         This is useful if you do not want some commands to be registered as slashes.
-    adjustment_name : AdjustmentNameMode, optional
+    adjustment_name : types_.AdjustmentNameMode, optional
         Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.  
         If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.
     replace_invalid_annotation_to_str : bool, default False
@@ -344,7 +344,7 @@ def extend_force_slash(
         This is a list of group commands to be registered first.  
         If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
         How to do it is described in the Notes of this function.
-    context_mode : ContextMode, default ContextMode.UNOFFICIAL
+    context_mode : types_.ContextMode, default types_.ContextMode.UNOFFICIAL
         How to make `ctx`.
     context_kwargs : dict, optional
         Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
@@ -661,7 +661,7 @@ def extend_force_slash(
 <dt><strong><code>check</code></strong> :&ensp;<code>Callable[[Union[commands.Command, commands.Group]], bool]</code>, optional</dt>
 <dd>Function used to check if a command should be added.<br>
 This is useful if you do not want some commands to be registered as slashes.</dd>
-<dt><strong><code>adjustment_name</code></strong> :&ensp;<code>AdjustmentNameMode</code>, optional</dt>
+<dt><strong><code>adjustment_name</code></strong> :&ensp;<code><a title="fslash.types_.AdjustmentNameMode" href="types_.html#fslash.types_.AdjustmentNameMode">AdjustmentNameMode</a></code>, optional</dt>
 <dd>Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.<br>
 If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.</dd>
 <dt><strong><code>replace_invalid_annotation_to_str</code></strong> :&ensp;<code>bool</code>, default <code>False</code></dt>
@@ -675,7 +675,7 @@ If you think something is wrong, check here.</dd>
 <dd>This is a list of group commands to be registered first.<br>
 If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.<br>
 How to do it is described in the Notes of this function.</dd>
-<dt><strong><code>context_mode</code></strong> :&ensp;<code>ContextMode</code>, default <code>ContextMode.UNOFFICIAL</code></dt>
+<dt><strong><code>context_mode</code></strong> :&ensp;<code><a title="fslash.types_.ContextMode" href="types_.html#fslash.types_.ContextMode">ContextMode</a></code>, default <code><a title="fslash.types_.ContextMode.UNOFFICIAL" href="types_.html#fslash.types_.ContextMode.UNOFFICIAL">ContextMode.UNOFFICIAL</a></code></dt>
 <dd>How to make <code>ctx</code>.</dd>
 <dt><strong><code>context_kwargs</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Keyword arguments to be passed to the arguments after <code>trigger_typing_mode</code> of <code><a title="fslash.context.Context" href="context.html#fslash.context.Context">Context</a></code>.<br>
@@ -748,7 +748,7 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
     check : Callable[[Union[commands.Command, commands.Group]], bool], optional
         Function used to check if a command should be added.  
         This is useful if you do not want some commands to be registered as slashes.
-    adjustment_name : AdjustmentNameMode, optional
+    adjustment_name : types_.AdjustmentNameMode, optional
         Whether the name should be Snake Case or Kebab Case and the number of characters should be automatically converted to 32 or less.  
         If you have many commands with names that cannot be used as slash command names, this is useful because it will automatically convert them all to usable names.
     replace_invalid_annotation_to_str : bool, default False
@@ -762,7 +762,7 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
         This is a list of group commands to be registered first.  
         If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
         How to do it is described in the Notes of this function.
-    context_mode : ContextMode, default ContextMode.UNOFFICIAL
+    context_mode : types_.ContextMode, default types_.ContextMode.UNOFFICIAL
         How to make `ctx`.
     context_kwargs : dict, optional
         Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
@@ -1078,9 +1078,9 @@ It is recommended to check just in case.</p>
 <dd>&nbsp;</dd>
 <dt><strong><code>bot</code></strong> :&ensp;<code>discord.ext.commands.Bot</code>, optional</dt>
 <dd>&nbsp;</dd>
-<dt><strong><code>interaction_response_mode</code></strong> :&ensp;<code>InteractionResponseMode</code>, default <code>InteractionResponseMode.REPLY</code></dt>
+<dt><strong><code>interaction_response_mode</code></strong> :&ensp;<code><a title="fslash.types_.InteractionResponseMode" href="types_.html#fslash.types_.InteractionResponseMode">InteractionResponseMode</a></code>, default <code>types._InteractionResponseMode.REPLY</code></dt>
 <dd>Which method is used to reply to the interaction response.</dd>
-<dt><strong><code>trigger_typing_mode</code></strong> :&ensp;<code>TriggerTypingMode</code>, default <code>TriggerTypingMode.DEFER_THINKING</code></dt>
+<dt><strong><code>trigger_typing_mode</code></strong> :&ensp;<code><a title="fslash.types_.TriggerTypingMode" href="types_.html#fslash.types_.TriggerTypingMode">TriggerTypingMode</a></code>, default <code><a title="fslash.types_.TriggerTypingMode.DEFER_THINKING" href="types_.html#fslash.types_.TriggerTypingMode.DEFER_THINKING">TriggerTypingMode.DEFER_THINKING</a></code></dt>
 <dd>Sets the behavior when <code><a title="fslash.Context.trigger_typing" href="#fslash.Context.trigger_typing">Context.trigger_typing()</a></code> and <code><a title="fslash.Context.typing" href="#fslash.Context.typing">Context.typing()</a></code> is executed.<br>
 You can use <code>defer</code> in the interaction response instead.<br>
 The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.reply()</a></code> can still be used afterwards.</dd>
@@ -1127,9 +1127,9 @@ The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.r
     kwargs : dict[str, Any]
     command : Union[discord.ext.commands.Command, discord.ext.commands.Group], optional
     bot : discord.ext.commands.Bot, optional
-    interaction_response_mode : InteractionResponseMode, default InteractionResponseMode.REPLY
+    interaction_response_mode : types_.InteractionResponseMode, default types._InteractionResponseMode.REPLY
         Which method is used to reply to the interaction response.
-    trigger_typing_mode : TriggerTypingMode, default TriggerTypingMode.DEFER_THINKING
+    trigger_typing_mode : types_.TriggerTypingMode, default types_.TriggerTypingMode.DEFER_THINKING
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;

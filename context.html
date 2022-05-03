@@ -88,9 +88,9 @@ class Context(Generic[BotT]):
     kwargs : dict[str, Any]
     command : Union[discord.ext.commands.Command, discord.ext.commands.Group], optional
     bot : discord.ext.commands.Bot, optional
-    interaction_response_mode : InteractionResponseMode, default InteractionResponseMode.REPLY
+    interaction_response_mode : types_.InteractionResponseMode, default types._InteractionResponseMode.REPLY
         Which method is used to reply to the interaction response.
-    trigger_typing_mode : TriggerTypingMode, default TriggerTypingMode.DEFER_THINKING
+    trigger_typing_mode : types_.TriggerTypingMode, default types_.TriggerTypingMode.DEFER_THINKING
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
@@ -288,9 +288,9 @@ It is recommended to check just in case.</p>
 <dd>&nbsp;</dd>
 <dt><strong><code>bot</code></strong> :&ensp;<code>discord.ext.commands.Bot</code>, optional</dt>
 <dd>&nbsp;</dd>
-<dt><strong><code>interaction_response_mode</code></strong> :&ensp;<code>InteractionResponseMode</code>, default <code>InteractionResponseMode.REPLY</code></dt>
+<dt><strong><code>interaction_response_mode</code></strong> :&ensp;<code>types_.InteractionResponseMode</code>, default <code>types._InteractionResponseMode.REPLY</code></dt>
 <dd>Which method is used to reply to the interaction response.</dd>
-<dt><strong><code>trigger_typing_mode</code></strong> :&ensp;<code>TriggerTypingMode</code>, default <code>TriggerTypingMode.DEFER_THINKING</code></dt>
+<dt><strong><code>trigger_typing_mode</code></strong> :&ensp;<code>types_.TriggerTypingMode</code>, default <code>types_.TriggerTypingMode.DEFER_THINKING</code></dt>
 <dd>Sets the behavior when <code><a title="fslash.context.Context.trigger_typing" href="#fslash.context.Context.trigger_typing">Context.trigger_typing()</a></code> and <code><a title="fslash.context.Context.typing" href="#fslash.context.Context.typing">Context.typing()</a></code> is executed.<br>
 You can use <code>defer</code> in the interaction response instead.<br>
 The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.reply">Context.reply()</a></code> can still be used afterwards.</dd>
@@ -337,9 +337,9 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
     kwargs : dict[str, Any]
     command : Union[discord.ext.commands.Command, discord.ext.commands.Group], optional
     bot : discord.ext.commands.Bot, optional
-    interaction_response_mode : InteractionResponseMode, default InteractionResponseMode.REPLY
+    interaction_response_mode : types_.InteractionResponseMode, default types._InteractionResponseMode.REPLY
         Which method is used to reply to the interaction response.
-    trigger_typing_mode : TriggerTypingMode, default TriggerTypingMode.DEFER_THINKING
+    trigger_typing_mode : types_.TriggerTypingMode, default types_.TriggerTypingMode.DEFER_THINKING
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
