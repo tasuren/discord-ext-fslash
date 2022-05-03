@@ -121,7 +121,7 @@ __all__ = (
     &#34;extend_force_slash&#34;, &#34;is_fslash&#34;, &#34;Context&#34;,
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;
 )
-__version__ = &#34;0.1.14&#34;
+__version__ = &#34;0.1.15&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -495,12 +495,11 @@ def extend_force_slash(
                 elif fsparent is not None:
                     _append_command(cog, group, True)
 
-                if fsparent is not None:
-                    for index, group in enumerate(groups):
-                        if group.name == name:
-                            del groups[index]
-                            break
-                    groups.append(group)
+                for index, group in enumerate(groups):
+                    if group.name == name:
+                        del groups[index]
+                        break
+                groups.append(group)
             else:
                 _apply_describe(command)
                 # スラッシュコマンドを作る。
@@ -913,12 +912,11 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
                 elif fsparent is not None:
                     _append_command(cog, group, True)
 
-                if fsparent is not None:
-                    for index, group in enumerate(groups):
-                        if group.name == name:
-                            del groups[index]
-                            break
-                    groups.append(group)
+                for index, group in enumerate(groups):
+                    if group.name == name:
+                        del groups[index]
+                        break
+                groups.append(group)
             else:
                 _apply_describe(command)
                 # スラッシュコマンドを作る。
