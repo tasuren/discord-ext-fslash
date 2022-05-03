@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.14"
+__version__ = "0.1.15"
 __author__ = "tasuren"
 
 
@@ -396,12 +396,11 @@ def extend_force_slash(
                 elif fsparent is not None:
                     _append_command(cog, group, True)
 
-                if fsparent is not None:
-                    for index, group in enumerate(groups):
-                        if group.name == name:
-                            del groups[index]
-                            break
-                    groups.append(group)
+                for index, group in enumerate(groups):
+                    if group.name == name:
+                        del groups[index]
+                        break
+                groups.append(group)
             else:
                 _apply_describe(command)
                 # スラッシュコマンドを作る。
