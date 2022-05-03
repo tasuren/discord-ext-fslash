@@ -78,7 +78,7 @@ class TestCog(commands.Cog):
 
 @bot.command("sleep", guild=GUILD)
 async def sleep_(ctx):
-    await ctx.trigger_typing()
+    await ctx.typing()
     await sleep(3)
     await ctx.reply("Ok")
 
@@ -166,7 +166,7 @@ async def level31(ctx):
 @discord.app_commands.describe(member="Member to be banned")
 async def ban(ctx, *, member: discord.Member):
     # `/server-tool ban member: ...` or `fs!ban ...` to run this command.
-    await ctx.trigger_typing()
+    await ctx.typing()
     await member.ban()
     await ctx.reply("pong")
 

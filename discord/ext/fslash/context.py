@@ -21,6 +21,9 @@ class NewTyping(Typing):
         else:
             await self.messageable.trigger_typing()
 
+    def __await__(self):
+        return self.__aenter__().__await__()
+
 
 class Context(Generic[BotT]):
     """Context that is passed to the command framework commands at slash execution time instead.
@@ -44,7 +47,6 @@ class Context(Generic[BotT]):
     * voice_client
     * send
     * reply
-    * trigger_typing
     * typing
     * history
     * pins
