@@ -2,24 +2,32 @@
 
 from __future__ import annotations
 
-from typing import Generic, Union, Optional, Any
+from typing import TYPE_CHECKING, Generic, Union, Optional, Any
 
 from datetime import datetime
 
 from discord.ext.commands.view import StringView
 from discord.ext import commands
-from discord.context_managers import Typing
 import discord
 
 from .types_ import BotT, TriggerTypingMode, InteractionResponseMode
 
+if TYPE_CHECKING:
+    from .context import Context
 
-class NewTyping(Typing):
+
+class NewTyping:
+    def __init__(self, ctx: Context):
+        self.ctx = ctx
+
     async def __aenter__(self):
-        if self.messageable.trigger_typing_mode == TriggerTypingMode.TYPING: # type: ignore
+        if self.ctx.trigger_typing_mode == TriggerTypingMode.TYPING: # type: ignore
             await super().__aenter__()
         else:
-            await self.messageable.trigger_typing()
+            await self.ctx.trigger_typing()
+
+    async def __aexit__(self, *_):
+        ...
 
     def __await__(self):
         return self.__aenter__().__await__()
