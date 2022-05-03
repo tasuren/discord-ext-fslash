@@ -121,7 +121,7 @@ __all__ = (
     &#34;extend_force_slash&#34;, &#34;is_fslash&#34;, &#34;Context&#34;,
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;
 )
-__version__ = &#34;0.1.12&#34;
+__version__ = &#34;0.1.13&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -150,11 +150,20 @@ _context_kwargs = {}
 _ctx_mode = ContextMode.UNOFFICIAL
 
 
-async def _make_context(interaction: discord.Interaction, *args, **kwargs) -&gt; Context | commands.Context:
+async def _make_context(interaction: discord.Interaction, kwargs, command, bot, **other) -&gt; Context | commands.Context:
     if _ctx_mode == ContextMode.OFFICIAL:
-        return await commands.Context.from_interaction(interaction)
+        ctx = await commands.Context.from_interaction(interaction)
+        ctx.kwargs = kwargs
+        ctx.command = command
+        ctx.subcommand_passed = None
+        ctx.invoked_subcommand = None
+        ctx.command_failed = False
+        ctx.invoked_parents = []
+        ctx.invoked_with = None
+        ctx.__fslash__ = True
+        return ctx
     else:
-        return Context(interaction, *args, **kwargs)
+        return Context(interaction, kwargs, command, bot, **other)
 
 
 # ConverterのアノテーションをTransformerに交換するようにする。
@@ -164,14 +173,14 @@ def _new_evaluate_annotation(*args, **kwargs):
     transform = None
     if commands.Converter in getattr(annotation, &#34;__mro__&#34;, ()):
         converter = annotation()
-        async def transform(cls, interaction, value: str):
+        async def transform(_, interaction, value: str):
             return await converter.convert(
                 await _make_context(interaction, {}, None, _bot, **_context_kwargs), value
             )
     if isfunction(annotation):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
-        async def transform(cls, _, value):
+        async def transform(_, __, value):
             return await converter(value) if iscoroutinefunction(converter) else converter(value)
     if transform is not None:
         annotation = app_commands.Transform[None, type(
@@ -650,7 +659,7 @@ def extend_force_slash(
 </details>
 </dd>
 <dt id="fslash.extend_force_slash"><code class="name flex">
-<span>def <span class="ident">extend_force_slash</span></span>(<span>bot: BotT, *, check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None, adjustment_name: Optional[AdjustmentNameMode] = None, replace_invalid_annotation_to_str: bool = False, default_description: str = '...', first_groups: Optional[Iterable[app_commands.Group]] = None, context_mode: ContextMode = ContextMode.OFFICIAL, context_kwargs: Optional[dict] = None) ‑> ~BotT</span>
+<span>def <span class="ident">extend_force_slash</span></span>(<span>bot: BotT, *, check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None, adjustment_name: Optional[AdjustmentNameMode] = None, replace_invalid_annotation_to_str: bool = False, default_description: str = '...', first_groups: Optional[Iterable[app_commands.Group]] = None, context_mode: ContextMode = ContextMode.UNOFFICIAL, context_kwargs: Optional[dict] = None) ‑> ~BotT</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This class forces commands in the command framework bot to be registered even if they are slash commands.</p>
@@ -1012,9 +1021,7 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
 <dl>
 <dt><strong><code>context</code></strong></dt>
 <dd>&nbsp;</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>It just run <code>isinstance(<a title="fslash.context" href="context.html">fslash.context</a>, <a title="fslash.Context" href="#fslash.Context">Context</a>)</code>.</p></div>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1024,12 +1031,8 @@ But the value of the argument at runtime is the value of <code>Choice</code>.</p
 
     Parameters
     ----------
-    context
-
-    Notes
-    -----
-    It just run `isinstance(context, fslash.Context)`.&#34;&#34;&#34;
-    return isinstance(context, Context)</code></pre>
+    context&#34;&#34;&#34;
+    return getattr(context, &#34;__fslash__&#34;, False)</code></pre>
 </details>
 </dd>
 </dl>
@@ -1133,6 +1136,8 @@ The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.r
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
+
+    __fslash__ = True
 
     def __init__(
         self, interaction: discord.Interaction, kwargs: dict[str, Any],

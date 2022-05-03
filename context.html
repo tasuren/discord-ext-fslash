@@ -95,6 +95,8 @@ class Context(Generic[BotT]):
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
 
+    __fslash__ = True
+
     def __init__(
         self, interaction: discord.Interaction, kwargs: dict[str, Any],
         command: Optional[Union[commands.Command, commands.Group]] = None,
@@ -198,12 +200,8 @@ def is_fslash(context: Union[Context, commands.Context]) -&gt; bool:
 
     Parameters
     ----------
-    context
-
-    Notes
-    -----
-    It just run `isinstance(context, fslash.Context)`.&#34;&#34;&#34;
-    return isinstance(context, Context)</code></pre>
+    context&#34;&#34;&#34;
+    return getattr(context, &#34;__fslash__&#34;, False)</code></pre>
 </details>
 </section>
 <section>
@@ -222,9 +220,7 @@ def is_fslash(context: Union[Context, commands.Context]) -&gt; bool:
 <dl>
 <dt><strong><code>context</code></strong></dt>
 <dd>&nbsp;</dd>
-</dl>
-<h2 id="notes">Notes</h2>
-<p>It just run <code>isinstance(context, <a title="fslash.Context" href="index.html#fslash.Context">Context</a>)</code>.</p></div>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -234,12 +230,8 @@ def is_fslash(context: Union[Context, commands.Context]) -&gt; bool:
 
     Parameters
     ----------
-    context
-
-    Notes
-    -----
-    It just run `isinstance(context, fslash.Context)`.&#34;&#34;&#34;
-    return isinstance(context, Context)</code></pre>
+    context&#34;&#34;&#34;
+    return getattr(context, &#34;__fslash__&#34;, False)</code></pre>
 </details>
 </dd>
 </dl>
@@ -343,6 +335,8 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
         Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards.&#34;&#34;&#34;
+
+    __fslash__ = True
 
     def __init__(
         self, interaction: discord.Interaction, kwargs: dict[str, Any],
