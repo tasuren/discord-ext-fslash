@@ -49,6 +49,9 @@ class NewTyping(Typing):
         else:
             await self.messageable.trigger_typing()
 
+    def __await__(self):
+        return self.__aenter__().__await__()
+
 
 class Context(Generic[BotT]):
     &#34;&#34;&#34;Context that is passed to the command framework commands at slash execution time instead.
@@ -72,7 +75,6 @@ class Context(Generic[BotT]):
     * voice_client
     * send
     * reply
-    * trigger_typing
     * typing
     * history
     * pins
@@ -261,7 +263,6 @@ It is recommended to check just in case.</p>
 <li>voice_client</li>
 <li>send</li>
 <li>reply</li>
-<li>trigger_typing</li>
 <li>typing</li>
 <li>history</li>
 <li>pins</li>
@@ -313,7 +314,6 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
     * voice_client
     * send
     * reply
-    * trigger_typing
     * typing
     * history
     * pins
@@ -563,7 +563,10 @@ The <code><a title="fslash.context.Context.reply" href="#fslash.context.Context.
         if self.messageable.trigger_typing_mode == TriggerTypingMode.TYPING: # type: ignore
             await super().__aenter__()
         else:
-            await self.messageable.trigger_typing()</code></pre>
+            await self.messageable.trigger_typing()
+
+    def __await__(self):
+        return self.__aenter__().__await__()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
