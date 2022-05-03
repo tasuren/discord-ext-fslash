@@ -3,7 +3,8 @@
 from asyncio import run, sleep
 
 from discord.ext import commands
-from discord.ext.fslash import extend_force_slash, groups, InteractionResponseMode
+from discord.ext.fslash.types_ import InteractionResponseMode, ContextMode
+from discord.ext.fslash import extend_force_slash, groups
 import discord
 
 
@@ -35,7 +36,8 @@ bot = extend_force_slash(MyBot(command_prefix="t!", intents=intents), first_grou
     discord.app_commands.Group(
         name="category", description="Test category", guild_ids=[GUILD_ID]
     )
-], replace_invalid_annotation_to_str=True, context_kwargs=dict(
+], replace_invalid_annotation_to_str=True, context_mode=ContextMode.OFFICIAL,
+context_kwargs=dict(
     interaction_response_mode=InteractionResponseMode.SEND_AND_REPLY
 ))
 

@@ -2,5 +2,5 @@ __pycache__
 *.*-project
 *.*-workspace
 *.secret
-.DS_Store
 docs
+.*

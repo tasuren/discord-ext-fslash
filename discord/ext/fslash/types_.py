@@ -4,6 +4,9 @@ from typing import TypeVar
 from enum import Enum
 
 
+__all__ = ("AdjustmentNameMode", "TriggerTypingMode", "InteractionResponseMode", "ContextMode")
+
+
 class AdjustmentNameMode(Enum):
     "It is how lib arrange the name."
 
@@ -31,6 +34,15 @@ class InteractionResponseMode(Enum):
     SEND_AND_REPLY = 2
     "Nothing, only ``interaction.response``."
     NONE = 3
+
+
+class ContextMode(Enum):
+    "It is how to create Context."
+
+    OFFICIAL = 1
+    "Use the standard `Context.from_interaction` in discord.py."
+    UNOFFICIAL = 1
+    "Use the `Context` provided in `discord-ext-fslash`."
 
 
 BotT = TypeVar("BotT")

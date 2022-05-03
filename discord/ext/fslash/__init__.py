@@ -1,4 +1,4 @@
-".. include:: ../../../README.md" # discord-ext-fslash
+".. include:: ../../../README.md" # discord-ext-fslash by tasuren
 
 from __future__ import annotations
 
@@ -14,16 +14,15 @@ from discord.ext import commands
 from discord import app_commands
 import discord
 
-from ._types import AdjustmentNameMode, BotT, TriggerTypingMode, InteractionResponseMode
+from .types_ import AdjustmentNameMode, ContextMode, BotT
 from .context import Context, is_fslash
 
 
 __all__ = (
-    "extend_force_slash", "is_fslash", "Context", "AdjustmentNameMode",
-    "groups", "exceptions", "adjustment_command_name", "TriggerTypingMode",
-    "InteractionResponseMode"
+    "extend_force_slash", "is_fslash", "Context",
+    "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.11"
+__version__ = "0.1.12"
 __author__ = "tasuren"
 
 
@@ -49,6 +48,14 @@ def adjustment_command_name(name: str, mode: AdjustmentNameMode) -> str:
 
 _bot = None
 _context_kwargs = {}
+_ctx_mode = ContextMode.UNOFFICIAL
+
+
+async def _make_context(interaction: discord.Interaction, *args, **kwargs) -> Context | commands.Context:
+    if _ctx_mode == ContextMode.OFFICIAL:
+        return await commands.Context.from_interaction(interaction)
+    else:
+        return Context(interaction, *args, **kwargs)
 
 
 # ConverterのアノテーションをTransformerに交換するようにする。
@@ -60,7 +67,7 @@ def _new_evaluate_annotation(*args, **kwargs):
         converter = annotation()
         async def transform(cls, interaction, value: str):
             return await converter.convert(
-                Context(interaction, {}, None, _bot, **_context_kwargs), value
+                await _make_context(interaction, {}, None, _bot, **_context_kwargs), value
             )
     if isfunction(annotation):
         # 関数のコンバーターを実行するTransformerを作る。
@@ -140,7 +147,7 @@ setattr(commands.Command, "_parse_arguments", _new_parse_arguments)
 
 async def _run_command(bot, interaction, command, content, kwargs={}) -> None:
     # Run command
-    ctx = Context(interaction, kwargs, command, bot, **_context_kwargs)
+    ctx = await _make_context(interaction, kwargs, command, bot, **_context_kwargs)
     if content is not None:
         ctx.view = type(ctx.view)(content)
         setattr(ctx, "__fslash_do_original_pa__", True)
@@ -183,6 +190,25 @@ async def _new_run_converters(ctx, converter, argument, param):
 commands.core.run_converters = _new_run_converters # type: ignore
 
 
+def _append_command(
+    cog: commands.Cog | None, command: discord.app_commands.Command, parent: bool
+):
+    if cog is not None:
+        if parent:
+            if not hasattr(cog, "__fslash_app_parent_commands__"):
+                setattr(cog, "__fslash_app_parent_commands__", [])
+            getattr(cog, "__fslash_app_parent_commands__").append(command)
+        else:
+            if not hasattr(cog, "__fslash_app_commands__"):
+                setattr(cog, "__fslash_app_commands__", [])
+            if not hasattr(cog, "__fslash_app_groups__"):
+                setattr(cog, "__fslash_app_groups__", [])
+            if isinstance(command, discord.app_commands.Group):
+                getattr(cog, "__fslash_app_groups__").append(command)
+            else:
+                getattr(cog, "__fslash_app_commands__").append(command)
+
+
 groups = []
 "List containing group commands scheduled to be registered with a slash."
 exceptions: DefaultDict[str, dict[Any, Exception]] = defaultdict(dict)
@@ -194,7 +220,7 @@ def extend_force_slash(
     adjustment_name: Optional[AdjustmentNameMode] = None,
     replace_invalid_annotation_to_str: bool = False,
     default_description: str = "...", first_groups: Optional[Iterable[app_commands.Group]] = None,
-    context_kwargs: Optional[dict] = None
+    context_mode: ContextMode = ContextMode.UNOFFICIAL, context_kwargs: Optional[dict] = None
 ) -> BotT:
     """This class forces commands in the command framework bot to be registered even if they are slash commands.
 
@@ -219,6 +245,8 @@ def extend_force_slash(
         This is a list of group commands to be registered first.  
         If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
         How to do it is described in the Notes of this function.
+    context_mode : ContextMode, default ContextMode.UNOFFICIAL
+        How to make `ctx`.
     context_kwargs : dict, optional
         Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
         Detail is here: `Context`
@@ -275,7 +303,8 @@ def extend_force_slash(
     You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
     Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.  
     But the value of the argument at runtime is the value of `Choice`."""
-    global _bot, groups, exceptions, _context_kwargs
+    global _bot, groups, exceptions, _context_kwargs, _ctx_mode
+    _ctx_mode = context_mode
     _context_kwargs.update(context_kwargs or {})
     _bot = bot
     if first_groups is not None:
@@ -292,8 +321,9 @@ def extend_force_slash(
     def command_new_init(command: commands.Command, func, /, **kwargs):
         if not (cog_mode := kwargs.pop("__cog_mode__", False)):
             original_command_init(command, func, **kwargs)
+        cog = kwargs.pop("__cog__", None)
 
-        # コグに実装されているコマンドの場合はコグが追加された後にスラッシュとして登録する。
+        # コグに実装されているコマンドの場合は、コグが追加された後にスラッシュとして登録する。
         # 理由は内部でコピーを行うためここが(多分)二回呼ばれてしまうためで、それを対策しようとするととてもめんどくさいことになってしまうから。
         if command.callback.__code__.co_varnames[0] == "self" and not cog_mode:
             if not isinstance(command, commands.Group):
@@ -342,15 +372,27 @@ def extend_force_slash(
             else adjustment_command_name(command.name, adjustment_name)
         if getattr(parent, "__fslash_max_parent__", False):
             return _replace_atp(False, None, replace_invalid_annotation_to_str)
+        is_group = isinstance(command, commands.Group)
         try:
             assert parent is None or len(parent._children) < 24
-            if isinstance(command, commands.Group):
-                groups.append(app_commands.Group(
+            if is_group:
+                group = app_commands.Group(
                     name=name,
                     description=command.description or default_description,
                     parent=parent, guild_ids=_get(command, "guild_ids", None)
-                ))
-                setattr(command, "__fslash__", groups[-1])
+                )
+                setattr(command, "__fslash__", group)
+                if parent is None:
+                    _append_command(cog, group, False)
+                elif fsparent is not None:
+                    _append_command(cog, group, True)
+
+                if fsparent is not None:
+                    for index, group in enumerate(groups):
+                        if group.name == name:
+                            del groups[index]
+                            break
+                    groups.append(group)
             else:
                 _apply_describe(command)
                 # スラッシュコマンドを作る。
@@ -368,6 +410,11 @@ def extend_force_slash(
                 async def inner_function(interaction: discord.Interaction, **kwargs): # type: ignore
                     await _run_command(bot, interaction, command, None, kwargs)
                 setattr(app_command, "_callback", inner_function)
+
+                if parent is None:
+                    _append_command(cog, app_command, False)
+                elif fsparent is not None:
+                    _append_command(cog, app_command, True)
         except (ValueError, AssertionError) as e:
             # もしNestしすぎたグループコマンドがある場合は、コマンドの文を受け取るコマンドを代わりに作る。
             assert isinstance(parent, app_commands.Group)
@@ -389,9 +436,30 @@ def extend_force_slash(
     original_inject = commands.Cog._inject
     def new_inject(self: commands.Cog, *args, **kwargs):
         for command in self.__cog_commands__:
-            command_new_init(command, command.callback, __cog_mode__=True)
+            command_new_init(command, command.callback, __cog_mode__=True, __cog__=self)
         return original_inject(self, *args, **kwargs)
     commands.Cog._inject = new_inject
+
+    # コグ削除時に、コグに実装されているコマンドが削除されるようにする。
+    original_remove_cog = commands.bot.BotBase.remove_cog
+    async def new_remove_cog(self: commands.bot.BotBase, name: str, /, *args, **kwargs):
+        if name in self.cogs:
+            if hasattr(self.cogs[name], "__fslash_app_commands__"):
+                setattr(
+                    self.cogs[name], "__cog_app_commands__",
+                    getattr(self.cogs[name], "__fslash_app_commands__")
+                )
+            if hasattr(self.cogs[name], "__fslash_app_groups__"):
+                setattr(
+                    self.cogs[name], "__cog_app_commands_group__",
+                    getattr(self.cogs[name], "__fslash_app_groups__")
+                )
+            # fsparentで親コマンドが指定されているコマンドを削除する。
+            if hasattr(self.cogs[name], "__fslash_app_parent_commands__"):
+                for command in getattr(self.cogs[name], "__fslash_app_parent_commands__"):
+                    command.parent.remove_command(command.name)
+        return await original_remove_cog(self, name, *args, **kwargs)
+    commands.bot.BotBase.remove_cog = new_remove_cog
 
     # コマンドが削除された時はスラッシュコマンドも削除する。
     def command_new_del(command: commands.Command):
@@ -406,6 +474,7 @@ def extend_force_slash(
     # `sync`が実行された際に`groups`にあるものを追加するようにする。
     original_sync = app_commands.CommandTree.sync
     async def new_sync(self, *, guild=None):
+        global groups
         for group in groups:
             if not getattr(group, "__synced__", False) \
                     and group.parent is None:

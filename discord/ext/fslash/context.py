@@ -11,7 +11,7 @@ from discord.ext import commands
 from discord.context_managers import Typing
 import discord
 
-from ._types import BotT, TriggerTypingMode, InteractionResponseMode
+from .types_ import BotT, TriggerTypingMode, InteractionResponseMode
 
 
 class NewTyping(Typing):
