@@ -67,6 +67,8 @@ class Context(Generic[BotT]):
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards."""
 
+    __fslash__ = True
+
     def __init__(
         self, interaction: discord.Interaction, kwargs: dict[str, Any],
         command: Optional[Union[commands.Command, commands.Group]] = None,
@@ -170,9 +172,5 @@ def is_fslash(context: Union[Context, commands.Context]) -> bool:
 
     Parameters
     ----------
-    context
-
-    Notes
-    -----
-    It just run `isinstance(context, fslash.Context)`."""
-    return isinstance(context, Context)
+    context"""
+    return getattr(context, "__fslash__", False)

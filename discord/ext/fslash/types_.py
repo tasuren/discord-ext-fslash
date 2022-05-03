@@ -39,7 +39,7 @@ class InteractionResponseMode(Enum):
 class ContextMode(Enum):
     "It is how to create Context."
 
-    OFFICIAL = 1
+    OFFICIAL = 0
     "Use the standard `Context.from_interaction` in discord.py."
     UNOFFICIAL = 1
     "Use the `Context` provided in `discord-ext-fslash`."

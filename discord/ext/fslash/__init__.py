@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.12"
+__version__ = "0.1.13"
 __author__ = "tasuren"
 
 
@@ -51,11 +51,20 @@ _context_kwargs = {}
 _ctx_mode = ContextMode.UNOFFICIAL
 
 
-async def _make_context(interaction: discord.Interaction, *args, **kwargs) -> Context | commands.Context:
+async def _make_context(interaction: discord.Interaction, kwargs, command, bot, **other) -> Context | commands.Context:
     if _ctx_mode == ContextMode.OFFICIAL:
-        return await commands.Context.from_interaction(interaction)
+        ctx = await commands.Context.from_interaction(interaction)
+        ctx.kwargs = kwargs
+        ctx.command = command
+        ctx.subcommand_passed = None
+        ctx.invoked_subcommand = None
+        ctx.command_failed = False
+        ctx.invoked_parents = []
+        ctx.invoked_with = None
+        ctx.__fslash__ = True
+        return ctx
     else:
-        return Context(interaction, *args, **kwargs)
+        return Context(interaction, kwargs, command, bot, **other)
 
 
 # ConverterのアノテーションをTransformerに交換するようにする。
@@ -65,14 +74,14 @@ def _new_evaluate_annotation(*args, **kwargs):
     transform = None
     if commands.Converter in getattr(annotation, "__mro__", ()):
         converter = annotation()
-        async def transform(cls, interaction, value: str):
+        async def transform(_, interaction, value: str):
             return await converter.convert(
                 await _make_context(interaction, {}, None, _bot, **_context_kwargs), value
             )
     if isfunction(annotation):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
-        async def transform(cls, _, value):
+        async def transform(_, __, value):
             return await converter(value) if iscoroutinefunction(converter) else converter(value)
     if transform is not None:
         annotation = app_commands.Transform[None, type(
