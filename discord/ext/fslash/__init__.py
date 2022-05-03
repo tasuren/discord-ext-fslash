@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.15"
+__version__ = "0.1.16"
 __author__ = "tasuren"
 
 
@@ -385,22 +385,20 @@ def extend_force_slash(
         try:
             assert parent is None or len(parent._children) < 24
             if is_group:
-                group = app_commands.Group(
+                for index, group in enumerate(groups):
+                    if group.name == name:
+                        del groups[index]
+                        break
+                groups.append(group := app_commands.Group(
                     name=name,
                     description=command.description or default_description,
                     parent=parent, guild_ids=_get(command, "guild_ids", None)
-                )
+                ))
                 setattr(command, "__fslash__", group)
                 if parent is None:
                     _append_command(cog, group, False)
                 elif fsparent is not None:
                     _append_command(cog, group, True)
-
-                for index, group in enumerate(groups):
-                    if group.name == name:
-                        del groups[index]
-                        break
-                groups.append(group)
             else:
                 _apply_describe(command)
                 # スラッシュコマンドを作る。
