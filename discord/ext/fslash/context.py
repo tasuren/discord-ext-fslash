@@ -124,6 +124,7 @@ class Context(Generic[BotT]):
         self.invoked_parents: list[Any] = []
         self.invoked_with = None
         self.edit = self._reply
+        self.attachments = []
 
         self.trigger_typing_mode = trigger_typing_mode
         self.interaction_response_mode = interaction_response_mode

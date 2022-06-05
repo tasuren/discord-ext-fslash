@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.16"
+__version__ = "0.1.18"
 __author__ = "tasuren"
 
 
@@ -107,8 +107,6 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
                     return _original_atp(annotation, parameter)
                 except Exception as e:
                     # 失敗したなら`str`のアノテーションにする。
-                    if failed_annotations is not None:
-                        failed_annotations[str(annotation)] = e
                     if parameter.kind in (
                         parameter.POSITIONAL_ONLY, parameter.VAR_KEYWORD, parameter.VAR_POSITIONAL
                     ):
