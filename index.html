@@ -121,7 +121,7 @@ __all__ = (
     &#34;extend_force_slash&#34;, &#34;is_fslash&#34;, &#34;Context&#34;,
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;
 )
-__version__ = &#34;0.1.16&#34;
+__version__ = &#34;0.1.18&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -206,8 +206,6 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
                     return _original_atp(annotation, parameter)
                 except Exception as e:
                     # 失敗したなら`str`のアノテーションにする。
-                    if failed_annotations is not None:
-                        failed_annotations[str(annotation)] = e
                     if parameter.kind in (
                         parameter.POSITIONAL_ONLY, parameter.VAR_KEYWORD, parameter.VAR_POSITIONAL
                     ):
@@ -1176,6 +1174,7 @@ The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.r
         self.invoked_parents: list[Any] = []
         self.invoked_with = None
         self.edit = self._reply
+        self.attachments = []
 
         self.trigger_typing_mode = trigger_typing_mode
         self.interaction_response_mode = interaction_response_mode
