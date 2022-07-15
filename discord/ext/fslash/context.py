@@ -86,7 +86,7 @@ class Context(Generic[BotT]):
         interaction_response_mode: InteractionResponseMode = InteractionResponseMode.REPLY,
         trigger_typing_mode: TriggerTypingMode = TriggerTypingMode.DEFER_THINKING
     ):
-        self.bot, self.interaction = bot, interaction
+        self.bot, self.interaction, self._state = bot, interaction, bot._connection
 
         self.message = interaction.message or self
         self.guild = interaction.guild
