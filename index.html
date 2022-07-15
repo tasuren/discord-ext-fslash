@@ -121,7 +121,7 @@ __all__ = (
     &#34;extend_force_slash&#34;, &#34;is_fslash&#34;, &#34;Context&#34;,
     &#34;groups&#34;, &#34;exceptions&#34;, &#34;adjustment_command_name&#34;
 )
-__version__ = &#34;0.1.17&#34;
+__version__ = &#34;0.1.18&#34;
 __author__ = &#34;tasuren&#34;
 
 
@@ -1136,7 +1136,7 @@ The <code><a title="fslash.Context.reply" href="#fslash.Context.reply">Context.r
         interaction_response_mode: InteractionResponseMode = InteractionResponseMode.REPLY,
         trigger_typing_mode: TriggerTypingMode = TriggerTypingMode.DEFER_THINKING
     ):
-        self.bot, self.interaction = bot, interaction
+        self.bot, self.interaction, self._state = bot, interaction, bot._connection
 
         self.message = interaction.message or self
         self.guild = interaction.guild
