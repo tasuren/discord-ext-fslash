@@ -89,6 +89,7 @@ class Context(Generic[BotT]):
         self.bot, self.interaction, self._state = bot, interaction, bot._connection
 
         self.message = interaction.message or self
+        self.mentions = []
         self.guild = interaction.guild
         self.author = interaction.user
         self.channel = interaction.channel or interaction.user
