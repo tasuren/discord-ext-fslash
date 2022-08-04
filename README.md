@@ -55,7 +55,7 @@ bot = extend_force_slash(
 @discord.app_commands.describe(member="Member to be banned")
 async def ban(ctx, *, member: discord.Member):
     # `/server-tool ban member: ...` or `fs!ban ...` to run this command.
-    await ctx.trigger_typing()
+    await ctx.typing()
     await member.ban()
     await ctx.reply("pong")
 

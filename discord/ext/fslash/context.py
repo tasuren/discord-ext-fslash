@@ -1,4 +1,4 @@
-# discord-ext-ui - Context
+# discord-ext-fslash - Context
 
 from __future__ import annotations
 
