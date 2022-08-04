@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.19"
+__version__ = "0.1.20"
 __author__ = "tasuren"
 
 
@@ -87,7 +87,7 @@ def _new_evaluate_annotation(*args, **kwargs):
         annotation = app_commands.Transform[None, type(
             "ConverterTransformer", (app_commands.Transformer,),
             {
-                "__fslash_original_annotation__": annotation,
+                "__fslash_original_annotation__": staticmethod(annotation),
                 "transform": classmethod(transform)
             }
         )]
@@ -105,7 +105,7 @@ def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats:
             if riats:
                 try:
                     return _original_atp(annotation, parameter)
-                except Exception as e:
+                except Exception:
                     # 失敗したなら`str`のアノテーションにする。
                     if parameter.kind in (
                         parameter.POSITIONAL_ONLY, parameter.VAR_KEYWORD, parameter.VAR_POSITIONAL
@@ -227,7 +227,7 @@ def extend_force_slash(
     adjustment_name: Optional[AdjustmentNameMode] = None,
     replace_invalid_annotation_to_str: bool = False,
     default_description: str = "...", first_groups: Optional[Iterable[app_commands.Group]] = None,
-    context_mode: ContextMode = ContextMode.UNOFFICIAL, context_kwargs: Optional[dict] = None
+    context_mode: ContextMode = ContextMode.OFFICIAL, context_kwargs: Optional[dict] = None
 ) -> BotT:
     """This class forces commands in the command framework bot to be registered even if they are slash commands.
 
@@ -252,10 +252,10 @@ def extend_force_slash(
         This is a list of group commands to be registered first.  
         If you have reached the maximum number of slash commands that can be registered, you can register more commands by registering the already registered commands as subcommands of the group command in this list.  
         How to do it is described in the Notes of this function.
-    context_mode : types_.ContextMode, default types_.ContextMode.UNOFFICIAL
+    context_mode : types_.ContextMode, default types_.ContextMode.OFFICIAL
         How to make `ctx`.
     context_kwargs : dict, optional
-        Keyword arguments to be passed to the arguments after `trigger_typing_mode` of `fslash.context.Context`.  
+        Keyword arguments to be passed to the arguments after `typing_mode` of `fslash.context.Context`.  
         Detail is here: `Context`
 
     Warnings
@@ -307,7 +307,7 @@ def extend_force_slash(
         ...
     ```
 
-    You can change which methods return interaction responses and how `Context.trigger_typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
+    You can change which methods return interaction responses and how `Context.typing` behaves by passing a value to `Context` with the `context_kwargs` argument.
     Also, `discord.app_commands.Choice` is replaced by `Literal` in the command framework commands.  
     But the value of the argument at runtime is the value of `Choice`."""
     global _bot, groups, exceptions, _context_kwargs, _ctx_mode

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generic, Union, Optional, Any
+from typing import Generic, Union, Optional, Any
 
 from datetime import datetime
 
@@ -10,10 +10,7 @@ from discord.ext.commands.view import StringView
 from discord.ext import commands
 import discord
 
-from .types_ import BotT, TriggerTypingMode, InteractionResponseMode
-
-if TYPE_CHECKING:
-    from .context import Context
+from .types_ import BotT, TypingMode, InteractionResponseMode
 
 
 class NewTyping:
@@ -21,10 +18,17 @@ class NewTyping:
         self.ctx = ctx
 
     async def __aenter__(self):
-        if self.ctx.trigger_typing_mode == TriggerTypingMode.TYPING: # type: ignore
+        if self.ctx.typing_mode == TypingMode.TYPING: # type: ignore
             await super().__aenter__()
         else:
-            await self.ctx.trigger_typing()
+            if self.typing_mode == TypingMode.TYPING:
+                await self.channel.typing() # type: ignore
+            elif self.typing_mode.name.startswith("DEFER"):
+                await self.interaction.response.defer(
+                    ephemeral=self.typing_mode.name.endswith("EPHEMERAL"),
+                    thinking="THINKING" in self.typing_mode.name
+                )
+                self._sended_defer = True
 
     async def __aexit__(self, *_):
         ...
@@ -72,8 +76,8 @@ class Context(Generic[BotT]):
     bot : discord.ext.commands.Bot, optional
     interaction_response_mode : types_.InteractionResponseMode, default types._InteractionResponseMode.REPLY
         Which method is used to reply to the interaction response.
-    trigger_typing_mode : types_.TriggerTypingMode, default types_.TriggerTypingMode.DEFER_THINKING
-        Sets the behavior when `Context.trigger_typing` and `Context.typing` is executed.  
+    typing_mode : types_.TypingMode, default types_.TypingMode.DEFER_THINKING
+        Sets the behavior when `Context.typing` and `Context.typing` is executed.  
         You can use `defer` in the interaction response instead.  
         The `Context.reply` can still be used afterwards."""
 
@@ -84,7 +88,7 @@ class Context(Generic[BotT]):
         command: Optional[Union[commands.Command, commands.Group]] = None,
         bot: Optional[BotT] = None,
         interaction_response_mode: InteractionResponseMode = InteractionResponseMode.REPLY,
-        trigger_typing_mode: TriggerTypingMode = TriggerTypingMode.DEFER_THINKING
+        typing_mode: TypingMode = TypingMode.DEFER_THINKING
     ):
         self.bot, self.interaction, self._state = bot, interaction, bot._connection
 
@@ -127,23 +131,13 @@ class Context(Generic[BotT]):
         self.edit = self._reply
         self.attachments = []
 
-        self.trigger_typing_mode = trigger_typing_mode
+        self.typing_mode = typing_mode
         self.interaction_response_mode = interaction_response_mode
         self._sended_defer = False
         self._emojis = ""
 
     async def invoke(self, command, *args, **kwargs):
         return await command(self, *args, **kwargs)
-
-    async def trigger_typing(self):
-        if self.trigger_typing_mode == TriggerTypingMode.TYPING:
-            await self.channel.trigger_typing() # type: ignore
-        elif self.trigger_typing_mode.name.startswith("DEFER"):
-            await self.interaction.response.defer(
-                ephemeral=self.trigger_typing_mode.name.endswith("EPHEMERAL"),
-                thinking="THINKING" in self.trigger_typing_mode.name
-            )
-            self._sended_defer = True
 
     async def _reply(self, content, kwargs):
         if self._sended_defer:

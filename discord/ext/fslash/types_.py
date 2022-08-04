@@ -4,7 +4,7 @@ from typing import TypeVar
 from enum import Enum
 
 
-__all__ = ("AdjustmentNameMode", "TriggerTypingMode", "InteractionResponseMode", "ContextMode")
+__all__ = ("AdjustmentNameMode", "TypingMode", "InteractionResponseMode", "ContextMode")
 
 
 class AdjustmentNameMode(Enum):
@@ -14,8 +14,8 @@ class AdjustmentNameMode(Enum):
     KEBAB_CASE = 2
 
 
-class TriggerTypingMode(Enum):
-    "The type of :meth:``fslash.context.Context.trigger_typing`` to identify its behavior."
+class TypingMode(Enum):
+    "The type of :meth:``fslash.context.Context.typing`` to identify its behavior."
 
     "Do nothing."
     NOTHING = 0
