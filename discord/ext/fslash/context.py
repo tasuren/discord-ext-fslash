@@ -143,7 +143,7 @@ class Context(Generic[BotT]):
         if self._sended_defer:
             if content is not None:
                 kwargs["content"] = content
-            await self.interaction.edit_original_message(**kwargs)
+            await self.interaction.edit_original_response(**kwargs)
             return self
         else:
             return await self.interaction.response.send_message(
