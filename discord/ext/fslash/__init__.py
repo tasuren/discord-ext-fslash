@@ -22,7 +22,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.21"
+__version__ = "0.1.22"
 __author__ = "tasuren"
 
 
@@ -475,15 +475,21 @@ def extend_force_slash(
                 slash.parent.remove_command(slash) # type: ignore
     setattr(commands.Command, "__del__", command_new_del)
 
-    # `sync`が実行された際に`groups`にあるものを追加するようにする。
-    original_sync = app_commands.CommandTree.sync
-    async def new_sync(self, *, guild=None):
+    @bot.listen("on_ready")
+    async def _add_groups():
+        # `groups`にあるものを追加する。
         global groups
         for group in groups:
             if not getattr(group, "__synced__", False) \
                     and group.parent is None:
                 bot.tree.add_command(group)
                 setattr(group, "__synced__", True)
+
+    # `sync`が実行された際に`_add_groups`を実行する様にする。
+    original_sync = app_commands.CommandTree.sync
+    async def new_sync(self, *, guild=None):
+        if bot.is_ready():
+            await _add_groups()
         return await original_sync(self, guild=guild)
     app_commands.CommandTree.sync = new_sync
 
