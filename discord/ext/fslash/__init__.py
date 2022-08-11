@@ -159,7 +159,8 @@ async def _run_command(bot, interaction, command, content, kwargs={}) -> None:
         ctx.view = type(ctx.view)(content)
         setattr(ctx, "__fslash_do_original_pa__", True)
     try:
-        await command.invoke(ctx) # type: ignore
+        if await bot.can_run(ctx, call_once=True):
+            await command.invoke(ctx) # type: ignore
     except commands.CommandError as e:
         await command.dispatch_error(ctx, e)
     else:
