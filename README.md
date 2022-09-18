@@ -1,22 +1,19 @@
 [![PyPI](https://img.shields.io/pypi/v/discord-ext-fslash)](https://pypi.org/project/discord-ext-fslash/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/discord-ext-fslash) ![PyPI - Downloads](https://img.shields.io/pypi/dm/discord-ext-fslash) ![PyPI - License](https://img.shields.io/pypi/l/discord-ext-fslash) [![Discord](https://img.shields.io/discord/777430548951728149?label=chat&logo=discord)](https://discord.gg/kfMwZUyGFG) [![Buy Me a Coffee](https://img.shields.io/badge/-tasuren-E9EEF3?label=Buy%20Me%20a%20Coffee&logo=buymeacoffee)](https://www.buymeacoffee.com/tasuren)
 # discord-ext-fslash
-This library registers commands from the discord.py command framework as slash commands in discord.py 2.0 as well by doing a monkey patch.
+This library registers commands from discord.py command framework as slash commands in discord.py as well by doing a monkey patch.
 
 **WARNING**  
-Again, the way this library works is a monkey patch and is not without the possibility of unexpected behavior.  
-Also, the 2.0 version of discord.py that supports slashes is still under development, and this library is being developed according to the specifications in that development phase.  
-Therefore, if there is a destructive update to discord.py, this library will not work until it is supported.  
-If you want to install version 2.0a now, you can do so by running: `pip3 install -U git+https://github.com/Rapptz/discord.py`.
+Again, the way this library works is a monkey patch and is not without the possibility of unexpected behavior.
 
 ## Features
-It will support both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.  
+It supports both the cooldown and other decorators of the command framework and the `describe` decorator of the app command to work.  
 The converter will automatically replace to the `Transformer` of slash version.  
 It can also automatically convert invalid annotations to `str` and register overnested group commands by accepting subcommands from command arguments.  
 Even if you have too many commands and reach the maximum number of can be registered slash commands, we have a way to deal with it. (An example is below)  
 If you are planning to create a bot, we recommend using HybridCommand, which comes standard in discord.py.
 
 ## Installation
-`pip install discord-ext-fslash`
+`$ pip install discord-ext-fslash`
 
 ## Example
 ### Normal
