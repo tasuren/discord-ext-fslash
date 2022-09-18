@@ -24,11 +24,11 @@ class NewTyping:
             if self.ctx.typing_mode == TypingMode.TYPING:
                 await self.channel.typing() # type: ignore
             elif self.ctx.typing_mode.name.startswith("DEFER"):
-                await self.interaction.response.defer(
+                await self.ctx.interaction.response.defer(
                     ephemeral=self.ctx.typing_mode.name.endswith("EPHEMERAL"),
                     thinking="THINKING" in self.ctx.typing_mode.name
                 )
-                self._sended_defer = True
+                self.ctx._sended_defer = True
 
     async def __aexit__(self, *_):
         ...
