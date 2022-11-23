@@ -23,7 +23,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.2.26"
+__version__ = "0.2.0"
 __author__ = "tasuren"
 
 
