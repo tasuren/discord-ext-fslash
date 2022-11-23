@@ -23,7 +23,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __author__ = "tasuren"
 
 
@@ -169,10 +169,10 @@ async def _run_command(bot, interaction, command, content, kwargs={}) -> None:
         setattr(ctx, "__fslash_do_original_pa__", True)
     try:
         if await bot.can_run(ctx, call_once=True) and (
-            command.parent is None or await gather(*(
+            command.parent is None or all(await gather(*(
                 parent.can_run(ctx)
                 for parent in command.parents
-            ))
+            )))
         ) and await command.can_run(ctx):
             await command.invoke(ctx) # type: ignore
     except commands.CommandError as e:
