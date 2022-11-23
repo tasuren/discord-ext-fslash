@@ -1,4 +1,4 @@
-[![PyPI](https://img.shields.io/pypi/v/discord-ext-fslash)](https://pypi.org/project/discord-ext-fslash/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/discord-ext-fslash) ![PyPI - Downloads](https://img.shields.io/pypi/dm/discord-ext-fslash) ![PyPI - License](https://img.shields.io/pypi/l/discord-ext-fslash) [![Buy Me a Coffee](https://img.shields.io/badge/-tasuren-E9EEF3?label=Buy%20Me%20a%20Coffee&logo=buymeacoffee)](https://www.buymeacoffee.com/tasuren)
+[![PyPI](https://img.shields.io/pypi/v/discord-ext-fslash)](https://pypi.org/project/discord-ext-fslash/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/discord-ext-fslash) ![PyPI - Downloads](https://img.shields.io/pypi/dm/discord-ext-fslash) ![PyPI - License](https://img.shields.io/pypi/l/discord-ext-fslash)
 # discord-ext-fslash
 This library registers commands from discord.py command framework as slash commands in discord.py as well by doing a monkey patch.
 
