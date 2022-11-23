@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from typing import Callable, Iterable, Literal, Union, Optional, Any, DefaultDict
 
-from inspect import isfunction, iscoroutinefunction
+from asyncio import gather
+import inspect
+
 from collections import defaultdict
 from string import octdigits
 from re import sub
-import inspect
 
 from discord.ext import commands
 from discord import app_commands
@@ -22,7 +23,7 @@ __all__ = (
     "extend_force_slash", "is_fslash", "Context",
     "groups", "exceptions", "adjustment_command_name"
 )
-__version__ = "0.1.26"
+__version__ = "0.2.26"
 __author__ = "tasuren"
 
 
@@ -40,7 +41,10 @@ def adjustment_command_name(name: str, mode: AdjustmentNameMode) -> str:
     return "".join(
         char
         for char in sub(
-            "(.[A-Z])", lambda x: f"{x.group(1)[0]}{sandwiched}{x.group(1)[1]}", name.lower()
+            "(.[A-Z])", lambda x:
+                f"{x.group(1)[0]}{sandwiched}"
+                f"{x.group(1)[1]}",
+            name.lower()
         ).lower()
         if char in VALID_COMMAND_NAME_CHARACTERS_WITHOUT_LETTERS
     )[:32]
@@ -51,7 +55,10 @@ _context_kwargs = {}
 _ctx_mode = ContextMode.UNOFFICIAL
 
 
-async def _make_context(interaction: discord.Interaction, kwargs, command, bot, **other) -> Context | commands.Context:
+async def _make_context(
+    interaction: discord.Interaction,
+    kwargs, command, bot, **other
+) -> Context | commands.Context:
     if _ctx_mode == ContextMode.OFFICIAL:
         ctx = await commands.Context.from_interaction(interaction)
         ctx.kwargs = kwargs
@@ -78,11 +85,13 @@ def _new_evaluate_annotation(*args, **kwargs):
             return await converter.convert(
                 await _make_context(interaction, {}, None, _bot, **_context_kwargs), value
             )
-    if isfunction(annotation):
+    if inspect.isfunction(annotation):
         # 関数のコンバーターを実行するTransformerを作る。
         converter = annotation
         async def transform(_, __, value):
-            return await converter(value) if iscoroutinefunction(converter) else converter(value)
+            return await converter(value) \
+                if inspect.iscoroutinefunction(converter) \
+                else converter(value)
     if transform is not None:
         annotation = app_commands.Transform[None, type(
             "ConverterTransformer", (app_commands.Transformer,),
@@ -97,7 +106,7 @@ discord.utils.evaluate_annotation = _new_evaluate_annotation
 
 _original_atp = app_commands.transformers.annotation_to_parameter
 _original_signature = inspect.signature
-def _replace_atp(toggle: bool, failed_annotations: Optional[dict] = None, riats: bool = False):
+def _replace_atp(toggle: bool, _: Optional[dict] = None, riats: bool = False):
     # `annotation_to_parameter`の実行が失敗した際に`str`として扱うようにする関数です。
     # それと、inspectの`signature`もアノテーションがない場合は拡張します。
     if toggle:
@@ -159,7 +168,12 @@ async def _run_command(bot, interaction, command, content, kwargs={}) -> None:
         ctx.view = type(ctx.view)(content)
         setattr(ctx, "__fslash_do_original_pa__", True)
     try:
-        if await bot.can_run(ctx, call_once=True):
+        if await bot.can_run(ctx, call_once=True) and (
+            command.parent is None or await gather(*(
+                parent.can_run(ctx)
+                for parent in command.parents
+            ))
+        ) and await command.can_run(ctx):
             await command.invoke(ctx) # type: ignore
     except commands.CommandError as e:
         await command.dispatch_error(ctx, e)
@@ -227,8 +241,10 @@ def extend_force_slash(
     check: Optional[Callable[[Union[commands.Command, commands.Group]], bool]] = None,
     adjustment_name: Optional[AdjustmentNameMode] = None,
     replace_invalid_annotation_to_str: bool = False,
-    default_description: str = "...", first_groups: Optional[Iterable[app_commands.Group]] = None,
-    context_mode: ContextMode = ContextMode.OFFICIAL, context_kwargs: Optional[dict] = None
+    default_description: str = "...",
+    first_groups: Optional[Iterable[app_commands.Group]] = None,
+    context_mode: ContextMode = ContextMode.OFFICIAL,
+    context_kwargs: Optional[dict] = None
 ) -> BotT:
     """This class forces commands in the command framework bot to be registered even if they are slash commands.
 

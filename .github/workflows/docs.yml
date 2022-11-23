@@ -1,4 +1,4 @@
-name: github-pages
+name: GitHub Pages
 
 on:
   push:
@@ -7,24 +7,41 @@ on:
   pull_request:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.9
-      - name: Build
+          python-version: 3.10.6
+
+      - name: Install requirements
         run: |
-          pip install pdoc3
-          pip install git+https://github.com/Rapptz/discord.py
-          pdoc --html -o tmp --force discord/ext/fslash
+          pip3 install -r requirements.txt
+          pip3 install pdoc3 discord.py
+
+      - name: Build
+        run: pdoc --html -o tmp --force discord/ext/fslash
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/upload-pages-artifact@v1
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./tmp/fslash
+          path: tmp/fslash
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

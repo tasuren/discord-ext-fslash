@@ -31,9 +31,11 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url=f'https://github.com/tasuren/{NAME}',
     project_urls={
-        "Documentation": f"https://tasuren.github.io/{NAME}"
+        "Documentation": f"https://tasuren.github.io/{NAME}",
+        "Donate": "https://www.buymeacoffee.com/tasuren",
+        "Source Code": f"https://github.com/tasuren/{NAME}",
+        "Chat": "https://discord.gg/kfMwZUyGFG"
     },
     author=author,
     author_email='tasuren@aol.com',
@@ -46,6 +48,7 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10'
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11'
     ]
 )
